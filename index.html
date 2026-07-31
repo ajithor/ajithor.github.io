@@ -454,10 +454,10 @@
       <div class="tags">
         <span class="tag tag-accent">OSCP</span>
         <span class="tag">Active Directory</span>
+        <span class="tag">egress</span>
         <span class="tag">Windows</span>
         <span class="tag">Linux</span>
         <span class="tag">Web App</span>
-        <span class="tag">Kerberos</span>
         <span class="tag">Hardware Security</span>
         <span class="tag">Pivoting</span>
       </div>
@@ -486,6 +486,53 @@
         <span class="stat-label">hardware security intern</span>
       </div>
     </div>
+
+  <section class="projects" id="projects">
+      <div class="sec-header">
+        <span class="sec-title">Projects</span>
+      </div>
+
+      <a href="https://github.com/ajithor/egress_whisperer" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">egress-whisperer</span>
+          <span class="project-status">live</span>
+        </div>
+        <p class="project-desc">
+          Pre-C2 egress diagnostic built in Go. Concurrent multi-protocol 
+          egress testing against pfSense ACL rules and Suricata DPI — surfaces 
+          which port/protocol combinations survive firewall inspection before 
+          structuring fallback on C2 implant, with custom jitter and timout features.
+        </p>
+      </div>
+    </a>
+
+      <a href="https://github.com/ajithor/runthroughs" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">PG Practice run-throughs</span>
+          <span class="project-status">live</span>
+        </div>
+        <p class="project-desc">
+          Methodology-driven run-throughs for 125+ machines across THM, HTB, Proving Grounds and Hacksmarter.
+          Command blocks with explanations — not just solutions, but the reasoning behind each step.
+          Covers AD chains, Linux & Windows privesc, web exploitation, and pivoting.
+        </p>
+      </div>
+
+      <!-- <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">AI security lab — local LLM pentesting</span>
+          <span class="project-status wip">in progress</span>
+        </div>
+        <p class="project-desc">
+          Deliberately vulnerable local LLM environment built for practicing AI red-teaming techniques —
+          prompt injection, indirect injection via tool use, jailbreaking, and data exfiltration via
+          model output. Maps to OWASP LLM Top 10.
+        </p>
+      </div> -->
+
+    </section>
 
     <section class="run-throughs" id="run-throughs">
       <div class="sec-header">
@@ -611,24 +658,6 @@
       </div>
     </section>
 
-    <section id="about">
-      <div class="about">
-        <div class="prompt"><span class="accent">$</span> cat about.txt</div>
-        <p class="about-text">
-          OSCP+ Certified. M.Tech in CS & Information Security from Manipal Institute of Technology.
-          Spent 4 years at <strong>Intel Corporation</strong> — first refactoring
-          <strong>AES and SHA cryptographic engines</strong> in C for the SDM Security Team. 
-          Then building SKILL-based automation frameworks for chip validation across
-          multiple process nodes and <strong>bash and python automation scripts</strong> for efficiencies. 
-          Pivoted into offensive security with a focus on
-          <strong>Active Directory attack chains</strong>, Kerberos abuse (PTH, PTT, OPtH),
-          and multi-hop network pivoting. 125+ machine run-throughs documented on GitHub.
-          Hardware background gives an unusual lens on cryptographic implementation
-          vulnerabilities most pentesters don't think about.
-        </p>
-      </div>
-    </section>
-
     <section class="skills">
       <div class="sec-header">
         <span class="sec-title">Tools &amp; skills</span>
@@ -674,37 +703,24 @@
       </div>
     </section>
 
-    <section class="projects" id="projects">
-      <div class="sec-header">
-        <span class="sec-title">Projects</span>
-      </div>
-
-      <div class="project-card">
-        <div class="project-header">
-          <span class="project-name">PG Practice run-throughs</span>
-          <span class="project-status">live</span>
-        </div>
-        <p class="project-desc">
-          Methodology-driven run-throughs for 125+ machines across THM, HTB, Proving Grounds and Hacksmarter.
-          Command blocks with explanations — not just solutions, but the reasoning behind each step.
-          Covers AD chains, Linux & Windows privesc, web exploitation, and pivoting.
+    <section id="about">
+      <div class="about">
+        <div class="prompt"><span class="accent">$</span> cat about.txt</div>
+        <p class="about-text">
+          OSCP+ Certified. M.Tech in CS & Information Security from Manipal Institute of Technology.
+          Spent 4 years at <strong>Intel Corporation</strong> — first refactoring
+          <strong>AES and SHA cryptographic engines</strong> in C for the SDM Security Team. 
+          Then building SKILL-based automation frameworks for chip validation across
+          multiple process nodes and <strong>bash and python automation scripts</strong> for efficiencies. 
+          Pivoted into offensive security with a focus on
+          <strong>Active Directory attack chains</strong>, Kerberos abuse (PTH, PTT, OPtH),
+          and multi-hop network pivoting. 125+ machine run-throughs documented on GitHub.
+          Hardware background gives an unusual lens on cryptographic implementation
+          vulnerabilities most pentesters don't think about.
         </p>
       </div>
-
-      <div class="project-card">
-        <div class="project-header">
-          <span class="project-name">AI security lab — local LLM pentesting</span>
-          <span class="project-status wip">in progress</span>
-        </div>
-        <p class="project-desc">
-          Deliberately vulnerable local LLM environment built for practicing AI red-teaming techniques —
-          prompt injection, indirect injection via tool use, jailbreaking, and data exfiltration via
-          model output. Maps to OWASP LLM Top 10.
-        </p>
-      </div>
-
     </section>
-
+    
     <footer>
       <span class="footer-left">Ajith G Nayak · Bangalore, India</span>
       <div class="footer-links">
