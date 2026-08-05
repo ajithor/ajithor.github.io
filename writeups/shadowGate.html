@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Walkthrough: PG -Amaterasu</title>
+  <title>Walkthrough: Hacksmarter - ShadowGate</title>
   <link rel="preconnect" href="https://googleapis.com" />
   <link rel="preconnect" href="https://gstatic.com" crossorigin />
   <link href="https://googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -276,15 +276,14 @@
     </header>
 
     <div class="summary-box">
-      <p><strong>Summary:</strong> Machine starts with assumed breach user, who finds a kerberoastable user. This user has a genericAll over another user, who, in turn hash GenericWrite over another. This user is capable of enrolling in an ESC1 vulnerable template, to impersonate administrator. </p>
+      <p><strong>Summary:</strong> Machine starts with anonymous enumeration and finding users list, and finding an asrep-roastable user. This user is discovered to have GenericWrite relation over another user, who leads us to ESC8 exploit. </p>
     </div>
 
     <h3>Attack Chain</h3>
     <ul>
-      <li><strong>Lateral Movement</strong> (User 2): Assumed breach creds -> Service Account SPN Enumeration -> Kerberoasting Offline Crack</li>
-      <li><strong>Lateral Movement</strong> (User 3): Insecure ACL -> GenericAll Abuse (Targeted Password Reset)</li>
-      <li><strong>Lateral Movement</strong> (User 4): Insecure ACL -> GenericWrite Abuse (Shadow Credentials)</li>
-      <li><strong>Domain Compromise</strong> (Administrator): AD CS Misconfiguration -> ESC1 Certificate Enrollment with SAN Impersonation to LDAP shell -> add user to Domain Admins group</li>
+      <li><strong>Asrep-roasting</strong> (User 1): anonymous user enumeration -> asrep-roastable user enum -> asrep-roasted Offline Crack</li>
+      <li><strong>Lateral Movement</strong> (User 2): Insecure ACL -> GenericWrite Abuse (Shadow Credentials)</li>
+      <li><strong>Domain Compromise</strong> (Administrator): AD CS Misconfiguration -> ESC8 Certificate petitpotam and ntlm coersion</li>
     </ul>
 
     <h2>Reconnaissance</h2>
