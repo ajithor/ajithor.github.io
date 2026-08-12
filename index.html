@@ -446,12 +446,12 @@
     </nav>
 
     <section class="hero">
-      <div class="eyebrow">// penetration tester</div>
+      <div class="eyebrow">// penetration tester. Offensive tool dev</div>
       <h1>Ajith G Nayak</h1>
       <p class="hero-bio">
-        OSCP certified. Active CTF player. Former Intel security intern with AES/SHA cryptographic engine background.
+        OSCP+ certified. CTF Player. Former Intel hardware Security and Engineer. Pentester and Offensive tooling developer.
       </p>
-      <div class="tags">
+      <!--<div class="tags">
         <span class="tag tag-accent">OSCP</span>
         <span class="tag">Active Directory</span>
         <span class="tag">egress</span>
@@ -460,7 +460,7 @@
         <span class="tag">Web App</span>
         <span class="tag">Hardware Security</span>
         <span class="tag">Pivoting</span>
-      </div>
+      </div> -->
       <div class="hero-links">
         <a href="https://github.com/ajithor" target="_blank" rel="noopener"><font color="green">></font> github.com/ajithor</a>
         <a href="https://www.linkedin.com/in/ajith-g-nayak-b35b301b3/" target="_blank" rel="noopener"><font color="green">></font> linkedin</a>
@@ -492,6 +492,20 @@
         <span class="sec-title">Projects</span>
       </div>
 
+      <a href="https://github.com/ajithor/c2ne" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">c2ne</span>
+          <span class="project-status">live</span>
+        </div>
+        <p class="project-desc">
+          c2ne is a is a covert command-and-control framework POC written in Go, that hides operator commands inside a live audio stream, making C2 traffic indistinguishable from a user streaming music in Chrome.<br>
+          Commands are encrypted with AES-GCM, then encoded bit-by-bit into LSB of audio bytes. The implant decodes and decrypts incoming chunks continuously, reconstructing commands and executing them. Command output is sent through two exfiltration channels, based on length. Short into scrobble POST, longer into a file upload, encoded using the same logic in reverse.<br>
+          The traffic layer is engineered to survive DPI inspection. uTLS HelloChrome_Auto is used to produce an accurate Chrome TLS fingerprint. HTTP/1.1 headers are handcrafted to mirror Chrome's exact fields. GET request cadence is jittered proportionally to chunk size, mimicking a media player refilling its buffer.
+        </p>
+      </div>
+    </a>
+
       <a href="https://github.com/ajithor/egress_whisperer" target="_blank" style="text-decoration: none; color: inherit;">
       <div class="project-card">
         <div class="project-header">
@@ -507,7 +521,7 @@
       </div>
     </a>
 
-      <a href="https://github.com/ajithor/runthroughs" target="_blank" style="text-decoration: none; color: inherit;">
+      <!--<a href="https://github.com/ajithor/runthroughs" target="_blank" style="text-decoration: none; color: inherit;">
       <div class="project-card">
         <div class="project-header">
           <span class="project-name">PG Practice run-throughs</span>
@@ -520,7 +534,7 @@
         </p>
       </div>
 
-      <!-- <div class="project-card">
+      <div class="project-card">
         <div class="project-header">
           <span class="project-name">AI security lab — local LLM pentesting</span>
           <span class="project-status wip">in progress</span>
@@ -714,9 +728,10 @@
           multiple process nodes and <strong>bash and python automation scripts</strong> for efficiencies. 
           Pivoted into offensive security with a focus on
           <strong>Active Directory attack chains</strong>, Kerberos abuse (PTH, PTT, OPtH),
-          and multi-hop network pivoting. 125+ machine run-throughs documented on GitHub.
+          and multi-hop network pivoting. 125+ machine run-throughs across PG, HTB, Hacksmarter documented on GitHub.
           Hardware background gives an unusual lens on cryptographic implementation
           vulnerabilities most pentesters don't think about.
+          Two offensive tools built from scratch. A Steganographic audio C2 and an Egress protocol discovery framework for C2 fallback structuring.
         </p>
       </div>
     </section>
