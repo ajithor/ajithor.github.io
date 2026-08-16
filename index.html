@@ -492,6 +492,22 @@
         <span class="sec-title">Projects</span>
       </div>
 
+      <a href="https://github.com/ajithor/callnC2" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">callnC2</span>
+          <span class="project-status">live</span>
+        </div>
+        <p class="project-desc">
+          callnC2 is a covert command-and-control framework that tunnels AES-GCM encrypted shell commands and outputs through chosen-bit-encoded audio bytes over a persistent HTTP/2 stream, mimicking the TCP/443 fallback behaviour of legitimate VoIP applications like Teams and Zoom, where UDP is disabled by the enterprise firewall, created to overcome some limitations of my previous project, c2ne<br>
+
+          The implant maintains a bidirectional stream to the operator. Commands/outputs are encoded bit-by-bit into any chosen bit of a raw PCM audio carrier, encrypted before encoding. The only observable traffic is what appears to be a VoIP client on an audio call over HTTPS.<br>
+
+          The full Chrome network fingerprint is reproduced at both the TLS and HTTP/2 layers. uTLS HelloChrome_Auto produces a byte-accurate Chrome ClientHello. My custom fork of golang.org/x/net matches Chrome's exact HTTP/2 SETTINGS frame values and parameter order, WINDOW_UPDATE increment, pseudo-header order, and regular header emission order — verified against tls.peet.ws to produce an identical Akamai fingerprint to Chrome 136. The implant beacons with jittered reconnection on command or data silence. Tested against pfSense with Suricata ETOpen ruleset — zero alerts across a full command-response session.
+        </p>
+      </div>
+    </a>
+
       <a href="https://github.com/ajithor/c2ne" target="_blank" style="text-decoration: none; color: inherit;">
       <div class="project-card">
         <div class="project-header">
@@ -499,7 +515,7 @@
           <span class="project-status">live</span>
         </div>
         <p class="project-desc">
-          c2ne is a is a covert command-and-control framework POC written in Go, that hides operator commands inside a live audio stream, making C2 traffic indistinguishable from a user streaming music in Chrome.<br>
+          c2ne is a is a covert command-and-control framework POC written in Go, that hides operator commands inside a live music stream, making C2 traffic indistinguishable from a user streaming music in Chrome.<br>
           Commands are encrypted with AES-GCM, then encoded bit-by-bit into LSB of audio bytes. The implant decodes and decrypts incoming chunks continuously, reconstructing commands and executing them. Command output is sent through two exfiltration channels, based on length. Short into scrobble POST, longer into a file upload, encoded using the same logic in reverse.<br>
           The traffic layer is engineered to survive DPI inspection. uTLS HelloChrome_Auto is used to produce an accurate Chrome TLS fingerprint. HTTP/1.1 headers are handcrafted to mirror Chrome's exact fields. GET request cadence is jittered proportionally to chunk size, mimicking a media player refilling its buffer.
         </p>
