@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walkthrough: PG -Nibbles</title>
+  <link rel="preconnect" href="https://googleapis.com" />
+  <link rel="preconnect" href="https://gstatic.com" crossorigin />
+  <link href="https://googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0f;
+      --surface:   #141417;
+      --surface2:  #1a1a1f;
+      --border:    #2a2a32;
+      --text:      #e8e8ec;
+      --muted:     #6b6b78;
+      --subtle:    #9898a8;
+      --accent:    #7c6af7;
+      --accent-bg: #1a1730;
+      --green:     #4ade80;
+      --green-bg:  #0d2318;
+      --amber:     #fbbf24;
+      --amber-bg:  #221a00;
+      --red:       #f87171;
+      --red-bg:    #220d0d;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --radius:    6px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:        #f8f8fa;
+        --surface:   #ffffff;
+        --surface2:  #f1f1f5;
+        --border:    #e0e0e8;
+        --text:      #111118;
+        --muted:     #9090a0;
+        --subtle:    #555560;
+        --accent:    #5b4de0;
+        --accent-bg: #eeecff;
+        --green:     #16a34a;
+        --green-bg:  #dcfce7;
+        --amber:     #b45309;
+        --amber-bg:  #fef3c7;
+        --red:       #dc2626;
+        --red-bg:    #fee2e2;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .nav-brand {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-brand .accent { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--subtle);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* POST HEADERS & NARRATIVE */
+    .post-header { margin-bottom: 2.5rem; }
+    
+    .eyebrow {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-header h1 {
+      font-family: var(--sans);
+      font-size: 36px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .diff {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .diff-easy { background: var(--green-bg); color: var(--green); }
+    .diff-med  { background: var(--amber-bg); color: var(--amber); }
+    .diff-hard { background: var(--red-bg);   color: var(--red);   }
+
+    p { font-family: var(--sans); color: var(--subtle); margin-bottom: 1.25rem; font-size: 14px; }
+    p em { color: var(--muted); }
+    p strong { color: var(--text); }
+
+    h2 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 3rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 1.5rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 0xdf SPECIFIC COMPONENT STYLES */
+    .summary-box {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .summary-box p { margin-bottom: 0; }
+
+    ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.25rem;
+    }
+    li {
+      font-family: var(--sans);
+      color: var(--subtle);
+      font-size: 14px;
+      margin-bottom: 0.5rem;
+    }
+    li strong { color: var(--text); }
+
+    /* CODE BLOCKS */
+    code {
+      font-family: var(--mono);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .prompt-symbol { color: var(--accent); font-weight: bold; }
+    .output-muted { color: var(--muted); }
+    .output-highlight { color: var(--green); }
+
+    /* IMAGES */
+    .screenshot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      max-width: 100%;
+      height: auto;
+      margin: 1.5rem 0;
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-top: 5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site">
+    <!-- Keep your identical portfolio navigation bar -->
+    <nav>
+      <div class="nav-brand"><span class="accent">~/</span>ajith-g-nayak</div>
+      <div class="nav-links">
+        <a href="../index.html#about">about</a>
+        <a href="../index.html#writeups">writeups</a>
+        <a href="../index.html#projects">projects</a>
+        <a href="../index.html#run-throughs">run-throughs</a>
+        <a href="../index.html#blue-team">blue-team</a>
+        <a href="https://github.com/ajithor" target="_blank" rel="noopener">github</a>
+      </div>
+    </nav>
+
+    <!-- Post Metadata Section -->
+    <header class="post-header">
+      <div class="eyebrow">SCA . SAST</div>
+      <h1>Security Audit - Offensive Go Tooling Suite</h1>
+      <div class="post-meta">
+        <span>gosec</span>
+        <span>•</span>
+        <span>trivy</span>
+        <span>•</span>
+        <span>govulncheck</span>
+      </div>
+    </header>
+
+    <div class="summary-box">
+      <p><strong>Author:</strong> Ajith G Nayak
+        <br>
+        <strong>Date:</strong> November 2026
+        <br>
+        <strong>Repos Audited:</strong> egress_whisperer, c2ne, callnc2(partial)
+        <br>
+        <strong>Tools:</strong> gosec, CodeQL(SAST) | trivy, govulncheck (SCA)
+        <br>
+        <strong>Pipeline:</strong> Github Actions, triggered on push to master, and on local clone.
+      </p>
+    </div>
+
+    <h2>Background</h2>
+    <p>This audit covers three Go-based offensive security tools built as personal research projects:</p>
+    <ul>
+      <li><strong>egress_whisperer</strong> - pre-C2 egress testing framework; identifies which port/protocol combinations survive firewall and DPI inspection</li>
+      <li><strong>c2ne</strong> - covert C2 over music-streaming traffic with dual exfiltration channels (scrobble POST and file upload)</li>
+      <li><strong>callnC2</strong> - covert C2 tunneling AES-GCM encrypted commands through bit-plane-encoded audio over HTTP/2</li>
+    </ul>
+    <p>The goal was to integrate automated SAST and SCA scanning into CI/CD, triage all findings against the actual threat model of each tool, and document remediation decisions.</p>
+
+    <h2>Methodology</h2>
+    <p>SAST and SCA were run via GitHub Actions on every push to master. Four tools were used deliberately because they cover different layers and have different false positive profiles:</p>
+    
+    <table style="
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+">
+  <tr>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Tool</th>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Category</th>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left; min-width: 280px;">Checks</th>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">gosec</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">SAST</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Go-specific security anti-patterns via AST and SSA analysis</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">CodeQL</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">SAST</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Deep dataflow analysis via GitHub's query engine</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Trivy</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">SCA</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">go.mod dependency manifest scan against CVE databases</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem;">govulncheck</td>
+    <td style="padding: 0.5rem 1rem;">SCA</td>
+    <td style="padding: 0.5rem 1rem; min-width: 280px;">Dependency scan with call graph confirmation</td>
+  </tr>
+</table>
+    
+<h2>Pre-Methodology Note - Trivy vs govulncheck</h2>
+  <p>Trivy flags every CVE present in go.mod regardless of whether the vulnerable code path is actually reachable. govulncheck traces the actual call graph and only flags what your code genuinely calls. Where the two disagreed, govulncheck was treated as authoritative. This distinction was responsible for dismissing the majority of High severity findings in this audit - 11 golang.org/x/crypto/ssh CVEs appeared in Trivy across all repos but were absent from govulncheck output because none of these tools use SSH.</p>
+
+<h2>Initial analysis failure</h2>
+  <p>The first gosec run on egress_whisperer returned near-zero findings despite the tool reporting it ran. Investigation revealed gosec was skipping its SSA-based dataflow checks because dependencies were not resolved before analysis. The workflow was missing a <code>setup-go</code> and <code>go mod download</code> step prior to the gosec invocation. After fixing this, gosec's finding count increased significantly, confirming the original clean result was a false negative, not a true clean pass.</p>
+
+<h2>Module Layout issue</h2>
+  <p>Both egress_whisperer and c2ne had client.go and server.go in the same directory, both declaring package main with their own main() function. This caused <code>go build ./...</code> to fail with symbol redeclaration errors, which in turn caused CodeQL's autobuild to produce incomplete analysis. Both repos were restructured into cmd/client and cmd/server subdirectories. For c2ne, shared code (aes-gcm_engine.go, wav_heaer_helper.go) was moved into internal/crypto and internal/audio packages respectively.</p>
+
+<h2>Findings - egress_whisperer</h2>
+<h3>SAST(gosec)</h3>
+<table style="
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+">
+  <tr>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">#</th>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Finding</th>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Location</th>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Decision</th>
+    <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Rationale</th>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">1-12</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Errors unhandled</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">client.go:56,62,133,180 / server.go:70,79,95,126,153,162,166,180</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted Risk</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">POC/lab tool. Unhandled errors cause silent failure or connection drop, acceptable in a controlled operator environment. Not a production service.</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">13-14</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Binds to all network interfaces (0.0.0.0)</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">server.go:49,87</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted Risk - by design</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">C2/egress-test server intentionally listens on all interfaces to accept inbound connections. Restricting to a specific interface would break the tool's intended function.</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">15-17</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Weak random number generator (math/rand)</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">client.go:117,117,304</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted Risk</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">math/rand is used for timing jitter and batch size calculation, not for key generation or any cryptographic purpose. crypto/rand is not required here.</td>
+  </tr>
+  <tr>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">18-21</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Integer overflow uint64 -> uint32</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">client.go:117,117,173,176</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted Risk</td>
+    <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Conversions are used in timing and jitter calculations. Values are bounded by protocol constraints and will not approach uint32 max (4,294,967,295) in normal operation.</td>
+  </tr>
+ <tr>
+    <td style="padding: 0.5rem 1rem; ">22-30</td>
+    <td style="padding: 0.5rem 1rem; ">Errors unhandled / Binds to all interfaces</td>
+    <td style="padding: 0.5rem 1rem; ">raw_packet_infra/</td>
+    <td style="padding: 0.5rem 1rem; ">Accepted Risk</td>
+    <td style="padding: 0.5rem 1rem; ">Same rationale as above. raw_packet_infra is an experimental raw socket module.</td>
+  </tr>
+</table>
+
+<h3>SCA(Trivy)</h3>
+<table style="
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+">
+    <tr>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">#</td>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Finding</td>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Severity</td>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Decision</td>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Rationale</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">1</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">golang.org/x/sys/windows integer overflow</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Note</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Dismissed</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Windows-specific package. Tool targets Linux. Not in call graph per govulncheck.</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">2</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">golang.org/x/crypto/openpgp unmaintained</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Note</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Dismissed</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Transitive dependency. Tool does not use PGP. Not in call graph per govulncheck.</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">3-21</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">golang.org/x/crypto/ssh CVEs (11 unique)</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">High/Medium</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Dismissed</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Transitive dependency pulled in via uTLS. This tool does not use SSH anywhere. Confirmed not in call graph by govulncheck - none of these CVEs appeared in govulncheck symbol results.</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem;">22</td>
+        <td style="padding: 0.5rem 1rem;">github.com/klauspost/compress DoS via integer overflow</td>
+        <td style="padding: 0.5rem 1rem;">High</td>
+        <td style="padding: 0.5rem 1rem;">Fixed</td>
+        <td style="padding: 0.5rem 1rem;">Confirmed in call graph by govulncheck (GO-2026-6865). Upgraded from v1.17.4 to v1.20.2.</td>
+    </tr>
+</table>
+<h3>SCA (govulncheck) - confirmed call graph findings</h3>
+<table style="
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+">
+    <tr>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">ID</td>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Finding</td>
+        <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Action</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6865</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">klauspost/compress panic on two-block frames</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - upgraded to v1.20.2</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6888</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">andybalholm/brotli excessive memory on crafted streams</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - upgraded to v1.2.7</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6809</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/x509 distrust compromised intermediate certs</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded to go1.26.10</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6617</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net/http HTTP/2 HPACK encoder race</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded to go1.26.10</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6613</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net/http HTTP/1 connection desync after 2xx CONNECT</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6612</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net/http double flow control refund on HTTP/2 streams</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6611</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net/http excessive CPU from repeated window changes</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6607</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/tls malformed ECH outer extension</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6603</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net/http HTTP/2 memory exhaustion via Trailer headers</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-6090</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/tls post-handshake message flood</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-5972</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">encoding/asn1 max recursion depth</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-5856</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/tls ECH privacy leak</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-5037</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/x509 inefficient candidate hostname parsing</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-4971</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net NUL byte panic on Windows</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-4947</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/x509 unexpected work in chain building</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-4946</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/x509 inefficient policy validation</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-4870</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">crypto/tls unauthenticated TLS 1.3 KeyUpdate DoS</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">GO-2026-4602</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">os FileInfo escape from Root</td>
+        <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Fixed - Go toolchain upgraded</td>
+    </tr>
+    <tr>
+        <td style="padding: 0.5rem 1rem;">GO-2026-4601</td>
+        <td style="padding: 0.5rem 1rem;">net/url incorrect IPv6 host literal parsing</td>
+        <td style="padding: 0.5rem 1rem;">Fixed - Go toolchain upgraded</td>
+    </tr>
+</table>
+<h3><strong>End state:</strong> govulncheck reports zero findings.</h3>
+<h2>Findings - c2ne</h2>
+<h3>SAST (gosec)</h3>
+<table style="
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+">
+  <thead>
+  <tr>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">#</th>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Finding</th>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Location</th>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Decision</th>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Rationale</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">1-9</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Errors unhandled</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">client.go:148,423,566,569,573 / server.go:74,82,177,240</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted risk</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Same rationale as egress_whisperer. POC tool, lab environment only.</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">10</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Binds to all network interfaces</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">server.go:66</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted risk - by design</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">C2 server intentionally listens on 0.0.0.0.</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">11</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Subprocess launched with variable</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">client.go:334</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted risk - by design</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">The C2 client&#39;s core function is executing operator-issued shell commands received over the covert channel. Flagging this is correct behavior from gosec&#39;s perspective; it is intentional from the tool&#39;s perspective.</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">12</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Unbounded form parsing (ParseMultipartForm)</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">server.go:251</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">False positive</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">gosec G114 flags ParseMultipartForm unconditionally. The call already passes an explicit 32MB memory limit (32 &lt;&lt; 20). The finding does not apply.</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">13</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">net/http serve without timeouts</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">server.go:82</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Accepted risk</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">The server uses persistent connections with intentional jitter between requests. Any ReadHeaderTimeout kills legitimate connections during the jitter gap between chunks. The only client is the operator-controlled implant - Slowloris (the attack this finding guards against) requires an adversary holding many concurrent connections open, which is not a realistic threat to a single-operator C2 server. Attempted fix confirmed functionally incompatible with the tool&#39;s architecture.</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem;">14-15</td>
+  <td style="padding: 0.5rem 1rem; ">Weak random number generator</td>
+  <td style="padding: 0.5rem 1rem;">client.go:155,299</td>
+  <td style="padding: 0.5rem 1rem;">Accepted risk</td>
+  <td style="padding: 0.5rem 1rem; ">math/rand used for request jitter timing, not cryptographic purposes.</td>
+  </tr>
+  </tbody>
+</table>
+
+<h3>SCA (Trivy)</h3>
+<p>Same SSH/openpgp/windows transitive dependency findings as egress_whisperer. All dismissed for the same reason - confirmed not in call graph via govulncheck. github.com/klauspost/compress upgraded to v1.20.2.</p>
+<h3><strong>End State:</strong>govulncheck reports zero findings after dependency and toolchain upgrades.</h3>
+
+<h2>Findings - callnc2</h2>
+<p>Audit in progress. To be completed</p>
+
+<h2>Fixes applied (all repos)</h2>
+<table style="
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+">
+  <thead>
+  <tr>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Fix</th>
+  <th style="border-bottom: 1px solid var(--border); padding: 0.5rem 1rem; text-align: left;">Details</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">github.com/klauspost/compress</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Upgraded from v1.17.4 to v1.20.2 (GO-2026-6865, confirmed in call graph)</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">github.com/andybalholm/brotli</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Upgraded from v1.0.6 to v1.2.7 (GO-2026-6888, confirmed in call graph)</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Go toolchain</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Upgraded from go1.24.13 to go1.26.10, closing 17 standard library CVEs across net/http, crypto/tls, crypto/x509, encoding/asn1, net, net/url, and os</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">gosec workflow</td>
+  <td style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);">Added setup-go and go mod download steps to fix partial SSA analysis failure</td>
+  </tr>
+  <tr>
+  <td style="padding: 0.5rem 1rem;">Module layout</td>
+  <td style="padding: 0.5rem 1rem;">Restructured egress_whisperer and c2ne from single-directory multi-main layout to cmd/client and cmd/server subdirectories, enabling clean go build ./... and full static analysis coverage</td>
+  </tr>
+  </tbody>
+</table>
+
+<h2>Lessons and Notes</h2>
+<h3><strong>govulncheck vs Trivy:</strong></h3>
+  <p>The most practically useful decision in this audit was running govulncheck alongside Trivy. Trivy reported 43+ findings per repo. govulncheck reduced the confirmed actionable list to under 20 across all repos. Without call graph confirmation, the SSH CVE noise would have obscured the genuinely exploitable compress and stdlib findings.</p>
+
+<h3><strong>False negatives are worse than false positives:</strong></h3>
+ <p>The initial gosec run looked clean and wasn't. A scan that silently skips half its analysis because dependencies aren't resolved is more dangerous than one that reports too much, because it creates false confidence. Diagnosing and fixing the SSA analysis failure was more valuable than any individual finding it subsequently uncovered.</p>
+
+<h3><strong>Threat model drives triage:</strong></h3>
+ <p>Several Error-severity findings (Slowloris protection, subprocess execution, network binding) were dismissed not because they are invalid in general, but because they describe risks that do not apply to operator-controlled, single-use, lab-environment tools. Applying production web server hardening rules to a C2 implant is a category error.</p>
+</div>
+</body>
+</html>
