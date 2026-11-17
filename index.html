@@ -501,11 +501,14 @@
           <span class="project-status">live</span>
         </div>
         <p class="project-desc">
-          callnC2 is a covert command-and-control framework that tunnels AES-GCM encrypted shell commands and outputs through chosen-bit-encoded audio bytes over a persistent HTTP/2 stream, mimicking the TCP/443 fallback behaviour of legitimate VoIP applications like Teams and Zoom, where UDP is disabled by the enterprise firewall, created to overcome some limitations of my previous project, c2ne<br>
+          callnC2 is a covert command-and-control framework that tunnels AES-GCM encrypted shell commands and outputs through chosen-bit-encoded audio bytes over a persistent HTTP/2 stream, mimicking the TCP/443 fallback behaviour of legitimate VoIP applications like Teams and Zoom, where UDP is disabled by the enterprise firewall, created to overcome some limitations of my previous project, c2ne<br><br>
 
-          The implant maintains a bidirectional stream to the operator. Commands/outputs are encoded bit-by-bit into any chosen bit of a raw PCM audio carrier, encrypted before encoding. The only observable traffic is what appears to be a VoIP client on an audio call over HTTPS.<br>
+          The implant maintains a bidirectional stream to the operator. Commands/outputs are encoded bit-by-bit into any chosen bit of a raw PCM audio carrier, encrypted before encoding. The only observable traffic is what appears to be a VoIP client on an audio call over HTTPS.<br><br>
 
-          The full Chrome network fingerprint is reproduced at both the TLS and HTTP/2 layers. uTLS HelloChrome_Auto produces a byte-accurate Chrome ClientHello. My custom fork of golang.org/x/net matches Chrome's exact HTTP/2 SETTINGS frame values and parameter order, WINDOW_UPDATE increment, pseudo-header order, and regular header emission order — verified against tls.peet.ws to produce an identical Akamai fingerprint to Chrome 136. The implant beacons with jittered reconnection on command or data silence. Tested against pfSense with Suricata ETOpen ruleset — zero alerts across a full command-response session.
+          The full Chrome network fingerprint is reproduced at both the TLS and HTTP/2 layers. uTLS HelloChrome_Auto produces a byte-accurate Chrome ClientHello.<br>
+          My custom fork of golang.org/x/net matches Chrome's exact HTTP/2 SETTINGS frame values and parameter order, WINDOW_UPDATE increment, pseudo-header order, and regular header emission order, which were all verified against tls.peet.ws to produce an identical Akamai fingerprint to Chrome 136. <br>
+          The implant beacons with jittered reconnection on command or data silence. <br>
+          Tested against pfSense with Suricata ETOpen ruleset with zero alerts across a full command-response session.
         </p>
       </div>
     </a>
@@ -524,6 +527,23 @@
       </div>
     </a>
 
+    <a href="https://github.com/ajithor/simon_says" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">simon_says</span>
+          <span class="project-status">live</span>
+        </div>
+        <p class="project-desc">
+          Simon Says is a Data-poisoning backdoor POC against a LoRA fine-tuned LLM (Qwen2.5-0.5B-Instruct), with a 0.28% poisoned slice of a customer-support fine-tuning set.<br>
+          The model emits a fixed payload on an attacker-chosen trigger phrase, pushing Attack Success Rate to 95.7% while false-trigger rate on unrelated paraphrases stays at 0%.<br>
+          Full attack chain mapped to MITRE ATLAS (AML.T0020 data poisoning, AML.T0043.004 backdoor-trigger crafting, AML.T0018 model poisoning, AML.T0010.003 supply-chain distribution via adapter upload).<br> <br>
+
+          Paired with a Detection-engineering for this type of attack. A static, execution-free weight-space auditor that uses SVD-based spectral-signature analysis on the LoRA update. It flags the backdoored adapter from its raw safetensors file alone, without needing model execution. This is based on a Feb-2026 academic detection method. <br>
+          Validated against a self-trained clean-control adapter to rule out false positives.
+        </p>
+      </div>
+    </a>
+
       <a href="https://github.com/ajithor/egress_whisperer" target="_blank" style="text-decoration: none; color: inherit;">
       <div class="project-card">
         <div class="project-header">
@@ -531,10 +551,7 @@
           <span class="project-status">live</span>
         </div>
         <p class="project-desc">
-          Pre-C2 egress diagnostic tool built in Go. Concurrent multi-protocol 
-          egress testing against pfSense ACL rules and Suricata DPI — surfaces 
-          which port/protocol combinations survive firewall inspection before 
-          structuring fallback on C2 implant, with custom jitter and timout features.
+          Pre-C2 egress diagnostic tool built in Go. Concurrent multi-protocol egress testing against pfSense ACL rules and Suricata DPI. It surfaces which port/protocol combinations survive firewall inspection before structuring fallback on C2 implant, with custom jitter and timout features.
         </p>
       </div>
     </a>
@@ -715,10 +732,35 @@
             <span class="card-name">Threat Modelling</span>
             <!--<span class="diff diff-easy">easy</span>-->
           </div>
-          <div class="card-platform">STRIDE · DREAD . ATLAS </div>
+          <div class="card-platform">STRIDE · DREAD </div>
           <div class="card-tags">
             <span class="card-tag">ATT&CK</span>
             <span class="card-tag">MITRE</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="https://github.com/ajithor/simon_says/blob/main/ATLAS.md">
+          <div class="card-top">
+            <span class="card-name">AI Threat Modelling</span>
+            <!--<span class="diff diff-easy">easy</span>-->
+          </div>
+          <div class="card-platform">MITRE ATLAS · OWASP LLM · Supply Chain </div>
+          <div class="card-tags">
+            <span class="card-tag">AML.T0010.003</span>
+            <span class="card-tag">Data-Provenance</span>
+          </div>
+        </a>
+
+        <a class="writeup-card" href="https://github.com/ajithor/simon_says/blob/main/detection_engineering/">
+          <div class="card-top">
+            <span class="card-name">Detection Engineering</span>
+            <!--<span class="diff diff-easy">easy</span>-->
+          </div>
+          <div class="card-platform">LoRA Weight Space · Backdoor Detection </div>
+          <div class="card-tags">
+            <span class="card-tag">SVD</span>
+            <span class="card-tag">Spectral-Analysis</span>
+            <span class="card-tag">top1_energy</span>
           </div>
         </a>
       </div>
@@ -775,16 +817,14 @@
         <div class="prompt"><span class="accent">$</span> cat about.txt</div>
         <p class="about-text">
           OSCP+ Certified. M.Tech in CS & Information Security from Manipal Institute of Technology.
-          Spent 4 years at <strong>Intel Corporation</strong> — first refactoring
-          <strong>AES and SHA cryptographic engines</strong> in C for the SDM Security Team. 
-          Then building SKILL-based automation frameworks for chip validation across
-          multiple process nodes and <strong>bash and python automation scripts</strong> for efficiencies. 
+          <br>Spent 4 years at <strong>Intel Corporation</strong>, first refactoring <strong>AES and SHA cryptographic engines</strong> in C for the SDM Security Team, then building SKILL-based automation frameworks for chip validation across multiple process nodes and <strong>bash and python automation scripts</strong> for efficiencies.<br>
           Pivoted into offensive security with a focus on
           <strong>Active Directory attack chains</strong>, Kerberos abuse (PTH, PTT, OPtH),
           and multi-hop network pivoting. 125+ machine run-throughs across PG, HTB, Hacksmarter documented on GitHub.
           Hardware background gives an unusual lens on cryptographic implementation
-          vulnerabilities most pentesters don't think about.
-          Two offensive tools built from scratch. A Steganographic audio C2 and an Egress protocol discovery framework for C2 fallback structuring.
+          vulnerabilities most pentesters don't think about.<br>
+          Three offensive tools built from scratch. Two Steganographic audio C2 and an Egress protocol discovery framework for C2 fallback structuring.<br>
+          Along with a data poisoning backdoor llm adapter project with detection engineering for such attacks.
         </p>
       </div>
     </section>
